@@ -1,4 +1,4 @@
-// File: /home/facade/projects/yt-web-client/app/layout.tsx
+// File: /home/facade/Video-Processing-Service/yt-web-client-new/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
