@@ -20,10 +20,11 @@ export interface Video {
   id?: string,
   uid?: string,
   filename?: string,
-  status?: 'processing' | 'processed',
+  status?: 'processing' | 'processed' | 'error', 
   title?: string,
   description?: string
 }
+
 
 async function getVideo(videoId: string) {
   const snapshot = await firestore.collection(videoCollectionId).doc(videoId).get();

@@ -25,14 +25,16 @@ app.post("/process-video", async (req, res) => {
   const outputFileName = `processed-${inputFileName}`;
   const videoId = inputFileName.split('.')[0];
 
-  if (!isVideoNew(videoId)) {
+  if (!await isVideoNew(videoId)) {
     return res.status(400).send('Bad Request: video already processed.');
   } else {
     await setVideo(videoId, {
       id: videoId,
       uid: videoId.split('-')[0],
+      filename: inputFileName,
       status: 'processing'
     });
+
   }
 
   // Download the raw video from Cloud Storage.
@@ -40,26 +42,44 @@ app.post("/process-video", async (req, res) => {
 
   try {
     await convertVideo(inputFileName, outputFileName);
-  } catch (err) {
+
+    // Upload the processed video to Cloud Storage.
+    await uploadProcessedVideo(outputFileName);
+
+    // Update the Firestore document to reflect that processing is complete
+    await setVideo(videoId, {
+      id: videoId,
+      uid: videoId.split('-')[0],
+      filename: outputFileName, // include the output file name
+      status: 'processed' // Update status to 'processed'
+    });
+
+
     await Promise.all([
       deleteRawVideo(inputFileName),
       deleteProcessedVideo(outputFileName)
     ]);
 
+    return res.status(200).send(`Video processed successfully.`);
+  } catch (err) {
+    // Handle errors during video processing
+
+    await Promise.all([
+      deleteRawVideo(inputFileName),
+      deleteProcessedVideo(outputFileName)
+    ]);
+
+    // Update the Firestore document to reflect the error
+    await setVideo(videoId, {
+      id: videoId,
+      uid: videoId.split('-')[0],
+      status: 'error' // Update status to indicate an error occurred
+    });
+
     console.error(err);
     return res.status(500).send(`Internal Server Error: video processing failed.`);
   }
-
-  // Upload the processed video to Cloud Storage.
-  await uploadProcessedVideo(outputFileName);
-  await Promise.all([
-    deleteRawVideo(inputFileName),
-    deleteProcessedVideo(outputFileName)
-  ]);
-
-  return res.status(200).send(`Video processed successfully.`);
 });
-
 
 const port = process.env.PORT || 3000; // Choose between ports.
 app.listen(port, () => {
