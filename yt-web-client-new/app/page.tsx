@@ -9,6 +9,7 @@ export default async function Home() {
 
   return (
     <main>
+      <h1>Home Page</h1>
       {
         videos.map((video) => (
           <Link href={`/watch?v=${video.filename}`}>
