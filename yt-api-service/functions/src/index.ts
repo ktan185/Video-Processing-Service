@@ -13,7 +13,6 @@ const storage = new Storage();
 const rawVideoBucketName = "snupsb-yt-raw-videos";
 
 const videoCollectionId = "videos";
-const metadataCollectionId = "videosMetadata";
 
 export interface Video {
   id?: string,
@@ -21,14 +20,8 @@ export interface Video {
   filename?: string,
   status?: "processing" | "processed",
   title?: string,
-  description?: string
-}
-
-interface VideoMetadata {
-  title?: string;
-  description?: string;
-  filename?: string;
-  uploadDate?: Date;
+  description?: string,
+  date?: string
 }
 
 export const createUser = functions.auth.user().onCreate((user) => {
@@ -58,6 +51,18 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 
   // Generate a unique filename
   const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
+  const fileId = `${auth.uid}-${Date.now()}`;
+
+  // Store the title and description
+  const title = data.title;
+  const desc = data.description;
+
+  // Update metadata about the video.
+  await firestore.collection(videoCollectionId).doc(fileId).set({
+    title: title,
+    description: desc,
+    date: new Date(),
+  }, {merge: true});
 
   // Get a v4 signed URL for uploading file
   const [url] = await bucket.file(fileName).getSignedUrl({
@@ -78,8 +83,8 @@ export const getVideos = onCall({maxInstances: 1}, async () => {
 
 export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
   // request should be in the form of video id.
-  const videoId = request.data;
-  if (!videoId) {
+  const fileId = request.data;
+  if (!fileId) {
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function must be called with a valid videoId."
@@ -88,7 +93,7 @@ export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
 
   // Attempt to retrieve the video metadata from the Firestore database
   try {
-    const videoRef = firestore.collection(metadataCollectionId).doc(videoId);
+    const videoRef = firestore.collection(videoCollectionId).doc(fileId);
     const doc = await videoRef.get();
 
     if (!doc.exists) {
@@ -118,38 +123,3 @@ export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
     );
   }
 });
-
-// Cloud Function to store video metadata
-export const storeVideoMetadata = onCall({maxInstances: 1}, async (request) => {
-  // Get the data from the request.
-  const data = request.data;
-
-  // Validate the received data
-  if (!data.title || !data.description || !data.filename) {
-    throw new functions.https.HttpsError(
-      "invalid-argument",
-      "The function must be called with title, description, and filename."
-    );
-  }
-
-  const videoMetadata: VideoMetadata = {
-    title: data.title,
-    description: data.description,
-    filename: data.filename,
-    uploadDate: new Date(), // Current date and time
-  };
-
-  // Store the metadata in Firestore
-  try {
-    await firestore.collection(metadataCollectionId).add(videoMetadata);
-    return {message: "Metadata stored successfully"};
-  } catch (error) {
-    console.error("Error storing video metadata:", error);
-    throw new functions.https.HttpsError(
-      "unknown",
-      "An error occurred while storing video metadata."
-    );
-  }
-});
-
-

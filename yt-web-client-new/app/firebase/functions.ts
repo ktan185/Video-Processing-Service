@@ -19,7 +19,9 @@ export interface Video {
 export async function uploadVideo(file: File, title: string, description: string) {
   
   const response: any = await generateUploadUrl({
-    fileExtension: file.name.split('.').pop()
+    fileExtension: file.name.split('.').pop(),
+    title: title ,
+    description: description
   });
 
   // Upload the file via the signed URL.
@@ -30,18 +32,6 @@ export async function uploadVideo(file: File, title: string, description: string
       'Content-Type': file.type
     }
   })
-
-  // Now that the file is uploaded, store its metadata
-  const fileName = response?.data?.fileName;
-  
-  // Generate the metadata for this specific video,
-  // Add this data to metadata collection.
-  await generateMetadata({
-    title: title,
-    description: description,
-    filename: fileName
-  });
-
   return;
 }
 
