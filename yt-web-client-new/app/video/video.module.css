@@ -1,0 +1,57 @@
+.videosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust min size as needed */
+  gap: 50px; /* Increase gap if needed */
+  align-items: start;
+}
+
+.videoItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1px;
+  padding: 1px; /* Adjust padding if needed */
+}
+
+.thumbnail {
+  margin: 5px;
+  border: 1px solid red;
+}
+
+.thumbnailTitle {
+  color: black;
+  margin-top: 1px;
+  font-size: 14px; /* Adjust font size as needed, with proper unit */
+  word-break: break-word; /* Ensures text breaks to prevent overflow */
+}
+
+.title {
+  width: 610px;
+  background-color: #b6b3b3; /* Light grey background, change as needed */
+  border-radius: 15px; /* Rounded corners for bubble effect */
+  padding: 15px; /* Space inside the bubble */
+  margin: 1px;
+  color: black;
+  font-family: Arial, sans-serif;
+  font-size: 20px; /* Adjust font size as needed */
+  word-break: break-word; /* Ensures text breaks to prevent overflow */
+}
+
+.description {
+  width: 610px;
+  background-color: #d5d5d5; /* Light grey background, change as needed */
+  border-radius: 15px; /* Rounded corners for bubble effect */
+  padding: 15px; /* Space inside the bubble */
+  margin: 1px;
+  color: black;
+  font-family: Arial, sans-serif;
+  font-size: 20px; /* Adjust font size as needed */
+  word-break: break-word; /* Ensures text breaks to prevent overflow */
+  font-size: 12px; /* Smaller font size for description */
+  /* Other properties will inherit from .title */
+}
+
+
+.link {
+  text-decoration: none;
+}

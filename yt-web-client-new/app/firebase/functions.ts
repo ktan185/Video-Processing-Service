@@ -4,7 +4,6 @@ import { functions } from './firebase';
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosFunction = httpsCallable(functions, 'getVideos');
-const generateMetadata = httpsCallable(functions, 'storeVideoMetadata');
 const getMetaDataFunction = httpsCallable(functions, 'getVideoMetaData');
 
 export interface Video {
@@ -40,15 +39,18 @@ export async function getVideos() {
   return response.data as Video[];
 }
 
-// Function to get information about the video
-export async function getVideoMetaData(videoId: string) {
+
+export async function getVideoMetadata(videoId: string): Promise<Video> {
   try {
-    const response: any = await getMetaDataFunction({
-      videoId: videoId
-    });
-    return response.data as Video;
+    const { data } = await getMetaDataFunction({ videoId });
+    if (!data) {
+      throw new Error('No metadata found');
+    }
+    return data as Video;
   } catch (error) {
-    console.error("Error fetching video metadata: ", error);
+    console.error('Error fetching video metadata:', error);
     throw error;
   }
 }
+
+
