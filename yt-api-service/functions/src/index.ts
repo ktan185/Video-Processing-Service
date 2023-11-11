@@ -13,6 +13,7 @@ const storage = new Storage();
 const rawVideoBucketName = "snupsb-yt-raw-videos";
 
 const videoCollectionId = "videos";
+const metadataCollectionId = "videosMetadata";
 
 export interface Video {
   id?: string,
@@ -21,6 +22,13 @@ export interface Video {
   status?: "processing" | "processed",
   title?: string,
   description?: string
+}
+
+interface VideoMetadata {
+  title?: string;
+  description?: string;
+  filename?: string;
+  uploadDate?: Date;
 }
 
 export const createUser = functions.auth.user().onCreate((user) => {
@@ -67,4 +75,81 @@ export const getVideos = onCall({maxInstances: 1}, async () => {
     // TODO, need pagination (offset)
   return querySnapshot.docs.map((doc) => doc.data());
 });
+
+export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
+  // request should be in the form of video id.
+  const videoId = request.data;
+  if (!videoId) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function must be called with a valid videoId."
+    );
+  }
+
+  // Attempt to retrieve the video metadata from the Firestore database
+  try {
+    const videoRef = firestore.collection(metadataCollectionId).doc(videoId);
+    const doc = await videoRef.get();
+
+    if (!doc.exists) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "The requested video does not exist."
+      );
+    }
+
+    // Cast the data to the Video interface
+    const videoMetaData = doc.data() as Video;
+
+    // Check if the video metadata actually includes all necessary Video fields
+    if (!videoMetaData || !videoMetaData.title || !videoMetaData.description) {
+      throw new functions.https.HttpsError(
+        "data-loss",
+        "The video metadata is incomplete."
+      );
+    }
+    // Return the video metadata
+    return videoMetaData;
+  } catch (error) {
+    logger.error("Error fetching video metadata: ", error);
+    throw new functions.https.HttpsError(
+      "unknown",
+      "An error occurred while fetching video metadata"
+    );
+  }
+});
+
+// Cloud Function to store video metadata
+export const storeVideoMetadata = onCall({maxInstances: 1}, async (request) => {
+  // Get the data from the request.
+  const data = request.data;
+
+  // Validate the received data
+  if (!data.title || !data.description || !data.filename) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function must be called with title, description, and filename."
+    );
+  }
+
+  const videoMetadata: VideoMetadata = {
+    title: data.title,
+    description: data.description,
+    filename: data.filename,
+    uploadDate: new Date(), // Current date and time
+  };
+
+  // Store the metadata in Firestore
+  try {
+    await firestore.collection(metadataCollectionId).add(videoMetadata);
+    return {message: "Metadata stored successfully"};
+  } catch (error) {
+    console.error("Error storing video metadata:", error);
+    throw new functions.https.HttpsError(
+      "unknown",
+      "An error occurred while storing video metadata."
+    );
+  }
+});
+
 

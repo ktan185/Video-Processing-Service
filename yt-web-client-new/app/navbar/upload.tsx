@@ -1,23 +1,35 @@
 'use client';
 
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import {uploadVideo} from "../firebase/functions";
 
 import styles from "./upload.module.css";
 
 export default function Upload() {
 
+  const [videoDetails, setVideoDetails] = useState({title: '', description: ''});
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.item(0);
     if (file) {
-      handleUpload(file);
+
+      const title = prompt("Enter video title: ");
+      const description = prompt("Enter video description: ");
+
+      if (title && description) {
+        setVideoDetails({title, description});
+        handleUpload(file, title, description);
+      } else {
+        alert("Upload Canceled");
+      }
     }
   }
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = async (file: File, title: string, description: string) => {
     try {
-      const response = await uploadVideo(file);
-      alert(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
+      // You might need to modify uploadVideo to accept and handle title and description.
+      const response = await uploadVideo(file, title, description);
+      console.log(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
     } catch (error) {
       alert(`Failed to upload file: ${error}`);
     }

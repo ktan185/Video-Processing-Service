@@ -12,10 +12,13 @@ export default async function Home() {
       <h1>Home Page</h1>
       {
         videos.map((video) => (
-          <Link href={`/watch?v=${video.filename}`}>
+          video.status === "processed" && (
+             <Link href={`/watch?v=${video.filename}`}>
             <Image src={'/thumbnail.png'} alt='video' width={120} height={80}
               className={styles.thumbnail} />
           </Link>
+          )
+         
         ))
       }
     </main>
