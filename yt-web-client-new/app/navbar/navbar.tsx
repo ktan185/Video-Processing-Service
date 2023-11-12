@@ -31,10 +31,10 @@ function NavBar() {
           <img className={styles.logo} src="/youtube-logo.svg" alt="YouTube Logo" />
         </span>
       </Link>
-      {
-        user && <Upload />
-      }
-      <SignIn user={user} />
+      <div className={styles.userActions}>
+        {user && <Upload />}
+        <SignIn user={user} />
+      </div>
     </nav>
   );
 }

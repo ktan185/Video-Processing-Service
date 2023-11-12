@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'
 import { Video } from '../video/video';
 import { getVideoMetadata } from '../firebase/functions';
+import styles from "./page.module.css"
 
 export default function Watch() {
   const videoPrefix = 'https://storage.googleapis.com/snupsb-yt-processed-videos/';
@@ -29,8 +30,8 @@ export default function Watch() {
   
   return (
     <div>
-      <h1>Watch Page</h1>
-      <Video videoMetadata = {videoMetadata} videoPrefix = {videoPrefix} videoSrc = {videoSrc}/>
+        <h1 className={styles.title}>Watch Page</h1>
+        <Video videoMetadata={videoMetadata} videoPrefix={videoPrefix} videoSrc={videoSrc} />
     </div>
   );
 }

@@ -1,0 +1,81 @@
+/* Global Styles */
+body {
+  background-color: #616060;
+  /* Dark background */
+  color: #e0e0e0;
+  /* Light text */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Sample font */
+}
+
+/* Headings, may need different color for visibility */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #ffffff;
+}
+
+/* Links */
+a {
+  color: #bb86fc;
+  /* A light purple color for links */
+}
+
+/* Input fields */
+input,
+textarea,
+select {
+  background-color: #333333;
+  /* Dark background for inputs */
+  color: #ffffff;
+  /* White text for inputs */
+  border: 1px solid #555555;
+  padding: 10px;
+}
+
+/* For images with transparency, a lighter background can be useful */
+img {
+  background-color: #242424;
+}
+
+/* UI Elements like cards, modals, etc. */
+.card,
+.modal {
+  background-color: #242424;
+  /* Slightly lighter than body background */
+  color: #e0e0e0;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #444444;
+  /* Dark line for separation */
+}
+
+/* Lists */
+ul,
+ol {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+/* Additional elements */
+/* ... */
