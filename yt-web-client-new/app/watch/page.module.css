@@ -1,11 +1,3 @@
-/* This will be the container that holds all .videoItem elements */
-.videosGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px; /* This sets the gap between grid items */
-  align-items: start; /* This aligns items to the start of the grid area */
-}
-
 .title {
   width: auto;
   background-color: #b6b3b3;

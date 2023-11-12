@@ -39,8 +39,10 @@ export const Video = (props: any) => {
 
   return (
     <>
-      <video controls src={props.videoPrefix + props.videoSrc} />
-      {video && <VideoDetails title = {video.title} description={video.description}/>}
+      <p className={styles.videoBackground}>
+        <video controls src={props.videoPrefix + props.videoSrc} />
+        {video && <VideoDetails title={video.title} description={video.description} />}
+      </p>
     </>
   ) 
 }

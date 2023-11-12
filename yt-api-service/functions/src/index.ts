@@ -13,6 +13,7 @@ const storage = new Storage();
 const rawVideoBucketName = "snupsb-yt-raw-videos";
 
 const videoCollectionId = "videos";
+const userCollectionId = "users";
 
 export interface Video {
   id?: string,
@@ -31,7 +32,7 @@ export const createUser = functions.auth.user().onCreate((user) => {
     photoUrl: user.photoURL,
   };
 
-  firestore.collection("users").doc(user.uid).set(userInfo);
+  firestore.collection(userCollectionId).doc(user.uid).set(userInfo);
   logger.info(`User Created: ${JSON.stringify(userInfo)}`);
   return;
 });

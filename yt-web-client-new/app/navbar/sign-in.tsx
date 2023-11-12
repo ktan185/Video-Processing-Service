@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 import { signInWithGoogle, signOut } from "../firebase/firebase";
 import styles from "./sign-in.module.css";
 import { User } from 'firebase/auth';

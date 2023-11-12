@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <main>
-      <h1>Home Page</h1>
+      <h1 className={styles.title}>Home Page</h1>
       <div className= {styles.videosGrid}>
         {videos.map((video) => (
           // Make sure to pass the video object to the Thumbnail component
