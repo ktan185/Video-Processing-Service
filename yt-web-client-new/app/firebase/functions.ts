@@ -4,6 +4,7 @@ import { functions } from './firebase';
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosFunction = httpsCallable(functions, 'getVideos');
+const getMetaDataFunction = httpsCallable(functions, 'getVideoMetaData');
 
 export interface Video {
   id?: string,
@@ -14,10 +15,12 @@ export interface Video {
   description?: string
 }
 
-export async function uploadVideo(file: File) {
+export async function uploadVideo(file: File, title: string, description: string) {
   
   const response: any = await generateUploadUrl({
-    fileExtension: file.name.split('.').pop()
+    fileExtension: file.name.split('.').pop(),
+    title: title ,
+    description: description
   });
 
   // Upload the file via the signed URL.
@@ -35,3 +38,19 @@ export async function getVideos() {
   const response = await getVideosFunction();
   return response.data as Video[];
 }
+
+
+export async function getVideoMetadata(videoId: string): Promise<Video> {
+  try {
+    const { data } = await getMetaDataFunction({ videoId });
+    if (!data) {
+      throw new Error('No metadata found');
+    }
+    return data as Video;
+  } catch (error) {
+    console.error('Error fetching video metadata:', error);
+    throw error;
+  }
+}
+
+

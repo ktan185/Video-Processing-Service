@@ -1,23 +1,25 @@
+import React from "react";
 import styles from './page.module.css'
 import { getVideos } from './firebase/functions'
-import Link from 'next/link';
-import Image from 'next/image';
+import { Thumbnail } from "./video/video";
 
 export default async function Home() {
 
+  // Get an array of 10 videos to display.
   const videos = await getVideos();
 
   return (
     <main>
       <h1>Home Page</h1>
-      {
-        videos.map((video) => (
-          <Link href={`/watch?v=${video.filename}`}>
-            <Image src={'/thumbnail.png'} alt='video' width={120} height={80}
-              className={styles.thumbnail} />
-          </Link>
-        ))
-      }
+      <div className= {styles.videosGrid}>
+        {videos.map((video) => (
+          // Make sure to pass the video object to the Thumbnail component
+          // and provide a unique key prop for each mapped item
+          <Thumbnail key={video.id} video={video} />
+        ))}
+      </div>
+     
     </main>
   )
 }
+

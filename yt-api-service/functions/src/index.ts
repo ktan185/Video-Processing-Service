@@ -20,7 +20,8 @@ export interface Video {
   filename?: string,
   status?: "processing" | "processed",
   title?: string,
-  description?: string
+  description?: string,
+  date?: string
 }
 
 export const createUser = functions.auth.user().onCreate((user) => {
@@ -50,6 +51,18 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 
   // Generate a unique filename
   const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
+  const fileId = `${auth.uid}-${Date.now()}`;
+
+  // Store the title and description
+  const title = data.title;
+  const desc = data.description;
+
+  // Update metadata about the video.
+  await firestore.collection(videoCollectionId).doc(fileId).set({
+    title: title,
+    description: desc,
+    date: new Date(),
+  }, {merge: true});
 
   // Get a v4 signed URL for uploading file
   const [url] = await bucket.file(fileName).getSignedUrl({
@@ -68,3 +81,45 @@ export const getVideos = onCall({maxInstances: 1}, async () => {
   return querySnapshot.docs.map((doc) => doc.data());
 });
 
+export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
+  // request should be in the form of video id.
+  const fileId = request.data;
+  if (!fileId) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function must be called with a valid videoId."
+    );
+  }
+
+  // Attempt to retrieve the video metadata from the Firestore database
+  try {
+    const videoRef = firestore.collection(videoCollectionId).doc(fileId);
+    const doc = await videoRef.get();
+
+    if (!doc.exists) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "The requested video does not exist."
+      );
+    }
+
+    // Cast the data to the Video interface
+    const videoMetaData = doc.data() as Video;
+
+    // Check if the video metadata actually includes all necessary Video fields
+    if (!videoMetaData || !videoMetaData.title || !videoMetaData.description) {
+      throw new functions.https.HttpsError(
+        "data-loss",
+        "The video metadata is incomplete."
+      );
+    }
+    // Return the video metadata
+    return videoMetaData;
+  } catch (error) {
+    logger.error("Error fetching video metadata: ", error);
+    throw new functions.https.HttpsError(
+      "unknown",
+      "An error occurred while fetching video metadata"
+    );
+  }
+});
