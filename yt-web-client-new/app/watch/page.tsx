@@ -6,9 +6,10 @@ import { Video } from '../video/video';
 import { getVideoMetadata } from '../firebase/functions';
 import styles from "./page.module.css"
 
-export default function Watch() {
+export default async function Watch() {
   const videoPrefix = 'https://storage.googleapis.com/snupsb-yt-processed-videos/';
   const videoSrc = useSearchParams().get('v');
+  
   let videoId = videoSrc?.replace("processed-","");
   videoId = videoId?.replace(".mp4","");
 

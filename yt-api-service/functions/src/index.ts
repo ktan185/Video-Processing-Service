@@ -89,6 +89,7 @@ export const getVideos = onCall({maxInstances: 1}, async () => {
 });
 
 export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
+  logger.info('Received request data:', request.data);
   // request should be in the form of video id.
   const fileId = request.data;
   if (!fileId) {
@@ -132,6 +133,8 @@ export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
 });
 
 export const getUserMetaData = onCall({maxInstances: 1}, async (request) => {
+  logger.info('Received request data:', request.data);
+
   const userId = request.data;
   if (!userId) {
     throw new functions.https.HttpsError(
@@ -140,7 +143,7 @@ export const getUserMetaData = onCall({maxInstances: 1}, async (request) => {
     );
   }
 
-  // Attempt to retrieve the video metadata from the Firestore database
+  // Attempt to retrieve the users metadata from the Firestore database
   try {
     const userRef = firestore.collection(userCollectionId).doc(userId);
     const doc = await userRef.get();
