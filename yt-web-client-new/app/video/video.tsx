@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { Fragment } from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
 
@@ -15,6 +15,7 @@ export interface Video {
 interface VideoDetailsProps {
   title: string;
   description: string;
+  date: string;
 }
 
 // Component for thumbnails for users to click on to take them to video.
@@ -25,36 +26,49 @@ export const Thumbnail = ({ video }: { video: Video }) => {
 
   return (
     <Link className = {styles.link} href={`/watch?v=${video.filename}`}>
-      <div className={styles.videoItem}>
         <Image src='/thumbnail.png' alt='Thumbnail' width={120} height={80}
           className={styles.thumbnail} />
         <p className={styles.thumbnailTitle}>{video.title}</p>
-      </div>
     </Link>
   );
 }
 
-export const Video = (props: any) => {
-  const video = props.videoMetadata;
+export const VideoPlayer = (props: any) => {
+  const title = props.title;
+  const date = props.date
+  const desc = props.desc;
+
+  const uploadDate = convertTimestampToDate(date.seconds, date.nanoseconds)
 
   return (
-    <>
-      <p className={styles.videoBackground}>
-        <video controls src={props.videoPrefix + props.videoSrc} />
-        {video && <VideoDetails title={video.title} description={video.description} />}
-      </p>
-    </>
-  ) 
-}
+    <div className={styles.videoBackground}>
+      <video controls src={props.videoPrefix + props.videoSrc} />
+      <VideoDetails title={title} description={desc} date={uploadDate} />
+    </div>
+  );
+};
 
 
-export const VideoDetails: React.FC<VideoDetailsProps> = ({ title, description }) => {
+export const VideoDetails: React.FC<VideoDetailsProps> = ({ title, description, date }) => {
   return (
     <div className="videoDetails">
       <h2 className={styles.title}>{title}</h2>
-      <p className={styles.description}>{description}</p>
+      <div className={styles.description}>
+        <p>
+          Date Uploaded: <strong>{date}</strong>
+        </p>
+        <p>
+          {description}
+        </p>
+      </div>
     </div>
   );
+}
+
+function convertTimestampToDate(seconds: number, nanoseconds: number): string {
+  const milliseconds = seconds * 1000 + nanoseconds / 1000000;
+  const date = new Date(milliseconds);
+  return date.toString();
 }
 
 
