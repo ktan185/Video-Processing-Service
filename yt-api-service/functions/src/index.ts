@@ -25,6 +25,12 @@ export interface Video {
   date?: string
 }
 
+export interface UserInfo {
+  uid?: string,
+  email?: string,
+  photoUrl?: string
+}
+
 export const createUser = functions.auth.user().onCreate((user) => {
   const userInfo = {
     uid: user.uid,
@@ -124,3 +130,47 @@ export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
     );
   }
 });
+
+export const getUserMetaData = onCall({maxInstances: 1}, async (request) => {
+  const userId = request.data;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "User does not exist."
+    );
+  }
+
+  // Attempt to retrieve the video metadata from the Firestore database
+  try {
+    const userRef = firestore.collection(userCollectionId).doc(userId);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "The requested video does not exist."
+      );
+    }
+
+    // Cast the data to the Video interface
+    const userMetaData = doc.data() as UserInfo;
+
+    // Check if the video metadata actually includes all necessary Video fields
+    if (!userMetaData ||
+       !userMetaData.uid || !userMetaData.email || !userMetaData.photoUrl) {
+      throw new functions.https.HttpsError(
+        "data-loss",
+        "The user metadata is incomplete."
+      );
+    }
+    // Return the video metadata
+    return userMetaData;
+  } catch (error) {
+    logger.error("Error fetching user metadata: ", error);
+    throw new functions.https.HttpsError(
+      "unknown",
+      "An error occurred while fetching user metadata"
+    );
+  }
+});
+
