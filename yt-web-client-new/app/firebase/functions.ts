@@ -40,13 +40,13 @@ export async function getVideos() {
 }
 
 
-export async function getVideoMetadata(videoId: string): Promise<Video> {
+export async function getVideoMetadata(data: string): Promise<Video> {
   try {
-    const { data } = await getMetaDataFunction({ videoId });
-    if (!data) {
+    const result = await getMetaDataFunction( data ) as any;
+    if (!result) {
       throw new Error('No metadata found');
     }
-    return data as Video;
+    return result as Video;
   } catch (error) {
     console.error('Error fetching video metadata:', error);
     throw error;
