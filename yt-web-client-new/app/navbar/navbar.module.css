@@ -31,9 +31,8 @@
     /* Adjust min size as needed */
     gap: 20px;
     /* Increase gap if needed */
-    align-items: start;
+    align-items: flex-start;
   /* Increase gap if needed */
-  align-items: start;
 }
 
 .userActions {
