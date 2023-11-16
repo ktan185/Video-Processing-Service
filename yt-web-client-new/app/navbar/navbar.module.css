@@ -7,7 +7,7 @@
 
 .logo {
   width: 120px;
-  height: 3dvb;
+  /* height: 3dvb; */
   background-color: #b6b3b3;
   /* Light grey background, change as needed */
   border-radius: 15px;
@@ -29,16 +29,13 @@
   justify-content: flex-end;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     /* Adjust min size as needed */
-    gap: 20px;
-    /* Increase gap if needed */
     align-items: flex-start;
   /* Increase gap if needed */
 }
 
 .userActions {
   display: flex;
-  align-items: center;
-  /* Aligns items vertically in the center */
-  gap: 10px;
-  /* Adjust the space between upload and sign-in buttons */
+  align-items: center; /* Vertically aligns flex items */
+  justify-content: flex-end; /* Aligns flex items to the end of the container */
+  /* Other styling as necessary */
 }

@@ -1,16 +1,17 @@
-import { SVGProps } from "react"
 import styles from "./user.module.css"
 
-interface UserprofileProps extends SVGProps<SVGImageElement> {
-  profilePicture: string
+interface UserProfileProps {
+  profilePicture: string;
 }
 
-export const Userprofile = ({ profilePicture, ...rest }: UserprofileProps) => {
+export const UserProfile: React.FC<UserProfileProps> = ({ profilePicture }) => {
   return (
     <>
-      <label htmlFor="upload" className={styles.profilePicture}>
-        <img src={profilePicture} alt="user" {...rest as any} />
+      <label className={styles.profilePicture}>
+        <img src={profilePicture} alt="user" />
       </label>
     </>
-  )
+  );
 }
+
+

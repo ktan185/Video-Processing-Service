@@ -10,17 +10,18 @@
   /* Center text horizontally */
   align-items: center;
   /* Center text vertically */
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50px;
   /* Make it circular */
   color: black;
   /* Color of the text */
-  border: none;
+  border: 2px;
   cursor: pointer;
   font-size: 10px;
   padding: 0.4em;
   background-color: rgb(230, 230, 230);
+  margin: 5px;
 }
 
 .uploadButton:hover {

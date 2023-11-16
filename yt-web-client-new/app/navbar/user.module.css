@@ -1,19 +1,16 @@
 .profilePicture {
-    display: flex;
-      /* Use Flexbox to center the text */
-      justify-content: flex-end;
-      /* Center text horizontally */
-      align-items: center;
-      /* Center text vertically */
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      /* Make it circular */
-      color: black;
-      /* Color of the text */
-      border: none;
-      cursor: pointer;
-      font-size: 10px;
-      padding: 0.4em;
-      background-color: rgb(230, 230, 230);
+  justify-content: end;
+  font-size: 10px;
+  padding: 0.4em;
+  margin: 0px;
+}
+
+.profilePicture img {
+  width: 34px;   /* Ensure the image covers the full width of the container */
+  height: 34px;
+  border-radius: 50px; /* Maintain the circular shape */
+  object-fit: cover; /* This will ensure the image covers the area without stretching */
+  object-position: center; /* Align the image nicely in the center */
+  margin: 1px;
+  padding: 0.4px;
 }

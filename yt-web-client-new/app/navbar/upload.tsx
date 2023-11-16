@@ -7,7 +7,6 @@ import styles from "./upload.module.css";
 
 export default function Upload() {
 
-  const [videoDetails, setVideoDetails] = useState({title: '', description: ''});
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.item(0);
@@ -17,7 +16,6 @@ export default function Upload() {
       const description = prompt("Enter video description: ");
 
       if (title && description) {
-        setVideoDetails({title, description});
         handleUpload(file, title, description);
       } else {
         alert("Upload Canceled");
