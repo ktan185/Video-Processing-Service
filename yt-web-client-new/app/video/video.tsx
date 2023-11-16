@@ -60,19 +60,18 @@ export const VideoPlayer = (props: any) => {
 export const VideoDetails: React.FC<VideoDetailsProps> = (props) => {
 
   const user = props.user;
+  let displayName = user && user.displayName ? user.displayName : '';
   let profilePicture = user && user.photoUrl ? user.photoUrl : '';
    
   return (
     <div className="videoDetails">
       <h2 className={styles.title}>{props.title}</h2>
       <div className={styles.description}>
-        <p>
-          <UserProfile profilePicture={profilePicture}/>
-          Date Uploaded: {props.date}
-        </p>
-        <p>
-          {props.description}
-        </p>
+          <UserProfile displayName={displayName} profilePicture={profilePicture}/>
+          Date Uploaded: <br/> {props.date}
+          <br/>
+          <br/>
+          Description: <br/> {props.description}
       </div>
     </div>
   );

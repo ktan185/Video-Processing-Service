@@ -1,5 +1,5 @@
 .profilePicture {
-  justify-content: end;
+  justify-content: left;
   font-size: 10px;
   padding: 0.4em;
   margin: 0px;
@@ -14,3 +14,28 @@
   margin: 1px;
   padding: 0.4px;
 }
+
+.videoPicture {
+  display: flex; 
+  flex-direction: row;
+  align-items: center;  
+  justify-content: left;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.videoPicture img {
+  width: 34px;   /* Ensure the image covers the full width of the container */
+  height: 34px;
+  border-radius: 50px; /* Maintain the circular shape */
+  object-fit: cover; /* This will ensure the image covers the area without stretching */
+  object-position: center; /* Align the image nicely in the center */
+  margin: 1px;
+  padding: 0.4px;
+}
+
+.displayName {
+  font-size: 15px;
+  position: center;
+}
+

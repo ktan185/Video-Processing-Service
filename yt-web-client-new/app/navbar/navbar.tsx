@@ -7,14 +7,21 @@ import styles from "./navbar.module.css";
 import { useEffect, useState } from "react";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
 import Upload from "./upload";
-import { UserProfile } from "./user";
+import { UserProfilePicture } from "./user";
 import { useUser } from "../context/UserContext";
+import getRandomGreeting from "./greetings/greetings"
 
 function NavBar() {
   // Initialise user state
   const { user, setUser } = useUser();
   const [profilePicture, setProfilePicture] = useState('');
+  const [greeting, setGreeting] = useState('');
 
+  // Display a greeting to the user on refresh
+  useEffect(() => {
+    const randomGreeting = getRandomGreeting();
+    setGreeting(randomGreeting);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedHelper((user) => {
@@ -38,7 +45,8 @@ function NavBar() {
         </span>
       </Link>
       <div className={styles.userActions}>
-        {user && <UserProfile profilePicture ={profilePicture}/>}
+        <>{greeting}</>
+        {user && <UserProfilePicture profilePicture ={profilePicture}/>}
         {user && <Upload />}
         <SignIn user={user} />
       </div>

@@ -59,7 +59,7 @@
   width: inherit;
   background-color: #d5d5d5; /* Light grey background, change as needed */
   border-radius: 15px; /* Rounded corners for bubble effect */
-  padding: 15px; /* Space inside the bubble */
+  padding: 10px; /* Space inside the bubble */
   margin: 1px;
   color: black;
   font-family: Arial, sans-serif;
