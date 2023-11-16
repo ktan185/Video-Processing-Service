@@ -20,7 +20,6 @@ function NavBar() {
     const unsubscribe = onAuthStateChangedHelper((user) => {
       setUser(user);
       console.log(user);
-      console.log('This is their photo link: ',user?.photoURL)
       const pictureURL = user?.photoURL;
       if (pictureURL) {
         setProfilePicture(pictureURL);

@@ -25,12 +25,6 @@ export interface Video {
   date?: string
 }
 
-export interface UserInfo {
-  uid?: string,
-  email?: string,
-  photoUrl?: string
-}
-
 export const createUser = functions.auth.user().onCreate((user) => {
   const userInfo = {
     uid: user.uid,
@@ -155,11 +149,10 @@ export const getUserMetaData = onCall({maxInstances: 1}, async (request) => {
     }
 
     // Cast the data to the Video interface
-    const userMetaData = doc.data() as UserInfo;
+    const userMetaData = doc.data() as object;
 
     // Check if the video metadata actually includes all necessary Video fields
-    if (!userMetaData ||
-       !userMetaData.uid || !userMetaData.email || !userMetaData.photoUrl) {
+    if (!userMetaData) {
       throw new functions.https.HttpsError(
         "data-loss",
         "The user metadata is incomplete."

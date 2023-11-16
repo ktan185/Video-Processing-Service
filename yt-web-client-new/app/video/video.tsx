@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
-import { User } from "firebase/auth";
 import { UserProfile } from "../navbar/user";
 
 export interface Video {
@@ -17,7 +16,7 @@ export interface Video {
 }
 
 interface VideoDetailsProps {
-  user: User;
+  user: any;
   title: string;
   description: string;
   date: string;
@@ -61,11 +60,8 @@ export const VideoPlayer = (props: any) => {
 export const VideoDetails: React.FC<VideoDetailsProps> = (props) => {
 
   const user = props.user;
-  let profilePicture = ''
-  if (user?.photoURL) {
-    profilePicture = user.photoURL as string
-  }
- 
+  let profilePicture = user && user.photoUrl ? user.photoUrl : '';
+   
   return (
     <div className="videoDetails">
       <h2 className={styles.title}>{props.title}</h2>
@@ -83,6 +79,9 @@ export const VideoDetails: React.FC<VideoDetailsProps> = (props) => {
 }
 
 function convertTimestampToDate(seconds: number, nanoseconds: number) {
+
+  // If the time is yet to be loaded, don't call function.
+  if (!seconds || !nanoseconds) return '';
   // Validate input
   if (typeof seconds !== 'number' || typeof nanoseconds !== 'number') {
     console.error('Invalid timestamp values:', { seconds, nanoseconds });
