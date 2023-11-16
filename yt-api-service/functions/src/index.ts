@@ -26,13 +26,15 @@ export interface Video {
 }
 
 export const createUser = functions.auth.user().onCreate((user) => {
+  // Continue to add user metadata as required.
   const userInfo = {
     uid: user.uid,
+    displayName: user.displayName,
     email: user.email,
     photoUrl: user.photoURL,
   };
 
-  firestore.collection("users").doc(user.uid).set(userInfo);
+  firestore.collection(userCollectionId).doc(user.uid).set(userInfo);
   logger.info(`User Created: ${JSON.stringify(userInfo)}`);
   return;
 });
