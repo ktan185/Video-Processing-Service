@@ -6,13 +6,13 @@ import SignIn from "./sign-in";
 import styles from "./navbar.module.css";
 import { useEffect, useState } from "react";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
-import { User } from "firebase/auth";
 import Upload from "./upload";
 import { UserProfile } from "./user";
+import { useUser } from "../context/UserContext";
 
 function NavBar() {
   // Initialise user state
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useUser();
   const [profilePicture, setProfilePicture] = useState('');
 
 
@@ -29,7 +29,7 @@ function NavBar() {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [] /* No dependencies, never rerun */);
+  }, [setUser]);
 
   return (
     <nav className={styles.nav}>

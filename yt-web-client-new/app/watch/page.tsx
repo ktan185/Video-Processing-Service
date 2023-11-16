@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'
-import { Video, VideoPlayer } from '../video/video';
+import { VideoPlayer } from '../video/video';
 import { getVideoMetadata } from '../firebase/functions';
 import styles from "./page.module.css"
 
@@ -17,9 +17,8 @@ export default function Watch() {
   }
 
   console.log(videoId);
-
   const [payload, setVideoMetadata] = useState<any | null>(null);
-
+  
   useEffect(() => {
     if (videoId) {
       getVideoMetadata(videoId).then(video => {
@@ -29,18 +28,6 @@ export default function Watch() {
       });
     }
   }, [videoId]);
-
-  interface VideoPlayerProps {
-    title: string;
-    desc: string;
-    date: {
-      seconds: number;
-      nanoseconds: number;
-    };
-    videoPrefix: string;
-    videoSrc: string;
-  }
-
 
   let title = "";
   let desc = "";
@@ -52,14 +39,11 @@ export default function Watch() {
     desc = payload.data.description;
     date = payload.data.date;
   }
-
-  console.log("Seconds:", date.seconds, "Nanoseconds:", date.nanoseconds);
-
-
- 
+   
   return (
     <div>
         <h1 className={styles.title}>Watch Page</h1>
+        {/* TO DO: ADD cloud function to get the user who uploaded the video! */}
       <VideoPlayer title={title} desc={desc} date={date} videoPrefix={videoPrefix} videoSrc={videoSrc} />
     </div>
   );
