@@ -6,12 +6,11 @@
 }
 
 .profilePicture img {
-  width: 34px;   /* Ensure the image covers the full width of the container */
-  height: 34px;
+  width: 35px;   /* Ensure the image covers the full width of the container */
+  height: 35px;
   border-radius: 50px; /* Maintain the circular shape */
   object-fit: cover; /* This will ensure the image covers the area without stretching */
   object-position: center; /* Align the image nicely in the center */
-  margin: 1px;
   padding: 0.4px;
 }
 

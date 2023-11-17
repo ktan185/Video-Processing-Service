@@ -10,6 +10,7 @@ import Upload from "./upload";
 import { UserProfilePicture } from "./user";
 import { useUser } from "../context/UserContext";
 import getRandomGreeting from "./greetings/greetings"
+import SearchBar from "./searchbar/searchbar";
 
 function NavBar() {
   // Initialise user state
@@ -44,9 +45,10 @@ function NavBar() {
           <img className={styles.logo} src="/youtube-logo.svg" alt="YouTube Logo" />
         </span>
       </Link>
+      <SearchBar/>
       <div className={styles.userActions}>
-        <>{greeting}</>
-        {user && <UserProfilePicture profilePicture ={profilePicture}/>}
+        {user && greeting}
+        {user && <UserProfilePicture profilePicture={profilePicture}/>}
         {user && <Upload />}
         <SignIn user={user} />
       </div>

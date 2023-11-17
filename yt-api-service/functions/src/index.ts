@@ -84,6 +84,32 @@ export const getVideos = onCall({maxInstances: 1}, async () => {
   return querySnapshot.docs.map((doc) => doc.data());
 });
 
+export const getSpecificVideos = onCall({maxInstances: 1}, async (request) => {
+  // request should be an array.
+  const toQuery = request.data;
+  if (!Array.isArray(toQuery)) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "Expected an array"
+    );
+  }
+  try {
+    const results =
+      await Promise.all(toQuery.map((id) => firestore
+        .collection(videoCollectionId).doc(id).get()));
+    const videos: Video[] =
+      results.map((doc) => doc.exists ? doc.data() as Video : null)
+        .filter((video): video is Video => video !== null);
+    return videos;
+  } catch (error) {
+    logger.error("Error fetching videos: ", error);
+    throw new functions.https.HttpsError(
+      "unknown",
+      "An error occurred while fetching search results"
+    );
+  }
+});
+
 export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
   // request should be in the form of video id.
   const fileId = request.data;
