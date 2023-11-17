@@ -35,6 +35,10 @@ export const SearchBar: React.FC = () => {
       const objectIdsArray = result.hits.map((hit) => hit.objectID);
       setObjectIds(objectIdsArray);
 			console.log("Here are the objectIds found:", objectIdsArray);
+      // Store the array locally in the browser.
+      if (objectIdsArray !== null && objectIdsArray !== undefined) {
+        localStorage.setItem('searchArray', JSON.stringify(objectIdsArray));
+      }
 		} catch (error) {
 			console.error('Search error:', error);
 		}
