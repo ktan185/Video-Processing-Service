@@ -1,0 +1,38 @@
+/* Styles for the search bar container */
+.searchContainer {
+  position: fixed;
+  top: 1%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, 50%); /* Center both horizontally and vertically */
+  margin: 10px;
+  display: flex;
+  align-items: center;
+}
+
+
+
+/* Styles for the search input */
+.searchInput {
+  padding: 10px 40px 10px 10px; /* Adjust padding to fit your design */
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  width: 300px; /* Adjust the width as needed */
+  outline: none;
+  font-size: 16px;
+}
+
+/* Styles for the search button */
+.searchButton {
+  background-color: #b7b7b8;
+  border-radius: 25px;
+  color: #000000;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* Hover effect for the search button */
+.searchButton:hover {
+  background-color: #949494;
+}
