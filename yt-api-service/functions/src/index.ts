@@ -12,8 +12,8 @@ const storage = new Storage();
 
 const rawVideoBucketName = "snupsb-yt-raw-videos";
 
-const videoCollectionId = "videos";
 const userCollectionId = "users";
+const videoCollectionId = "videos";
 
 export interface Video {
   id?: string,
@@ -25,15 +25,11 @@ export interface Video {
   date?: string
 }
 
-export interface UserInfo {
-  uid?: string,
-  email?: string,
-  photoUrl?: string
-}
-
 export const createUser = functions.auth.user().onCreate((user) => {
+  // Continue to add user metadata as required.
   const userInfo = {
     uid: user.uid,
+    displayName: user.displayName,
     email: user.email,
     photoUrl: user.photoURL,
   };
@@ -89,12 +85,8 @@ export const getVideos = onCall({maxInstances: 1}, async () => {
 });
 
 export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
-  logger.info('Received request data:', request.data);
   // request should be in the form of video id.
   const fileId = request.data;
-  
-  console.log('fileId:', fileId);
-
   if (!fileId) {
     throw new functions.https.HttpsError(
       "invalid-argument",
@@ -107,9 +99,23 @@ export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
     const videoRef = firestore.collection(videoCollectionId).doc(fileId);
     const doc = await videoRef.get();
 
+    if (!doc.exists) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "The requested video does not exist."
+      );
+    }
+
     // Cast the data to the Video interface
     const videoMetaData = doc.data() as Video;
 
+    // Check if the video metadata actually includes all necessary Video fields
+    if (!videoMetaData || !videoMetaData.title || !videoMetaData.description) {
+      throw new functions.https.HttpsError(
+        "data-loss",
+        "The video metadata is incomplete."
+      );
+    }
     // Return the video metadata
     return videoMetaData;
   } catch (error) {
@@ -122,7 +128,7 @@ export const getVideoMetaData = onCall({maxInstances: 1}, async (request) => {
 });
 
 export const getUserMetaData = onCall({maxInstances: 1}, async (request) => {
-  logger.info('Received request data:', request.data);
+  logger.info("Received request data:", request.data);
 
   const userId = request.data;
   if (!userId) {
@@ -145,11 +151,10 @@ export const getUserMetaData = onCall({maxInstances: 1}, async (request) => {
     }
 
     // Cast the data to the Video interface
-    const userMetaData = doc.data() as UserInfo;
+    const userMetaData = doc.data() as object;
 
     // Check if the video metadata actually includes all necessary Video fields
-    if (!userMetaData ||
-       !userMetaData.uid || !userMetaData.email || !userMetaData.photoUrl) {
+    if (!userMetaData) {
       throw new functions.https.HttpsError(
         "data-loss",
         "The user metadata is incomplete."
@@ -165,4 +170,3 @@ export const getUserMetaData = onCall({maxInstances: 1}, async (request) => {
     );
   }
 });
-

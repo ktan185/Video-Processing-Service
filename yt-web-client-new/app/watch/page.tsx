@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'
-import { Video, VideoPlayer } from '../video/video';
-import { getVideoMetadata } from '../firebase/functions';
+import { VideoPlayer } from '../video/video';
+import { getVideoMetadata, getUserMetadata } from '../firebase/functions';
 import styles from "./page.module.css"
 
 export default function Watch() {
@@ -15,11 +15,10 @@ export default function Watch() {
     videoId = videoSrc.replace("processed-", "");
     videoId = videoId.split(".")[0];
   }
-
-  console.log(videoId);
-
+  const userId = videoId.split("-")[0];
   const [payload, setVideoMetadata] = useState<any | null>(null);
-
+  const [uploader, setUploaderMetadata] = useState<any | null>(null);
+  
   useEffect(() => {
     if (videoId) {
       getVideoMetadata(videoId).then(video => {
@@ -27,40 +26,29 @@ export default function Watch() {
       }).catch((err) => {
         console.error(err);
       });
+      getUserMetadata(userId).then(uploader => {
+        setUploaderMetadata(uploader);
+      }).catch((err2) => {
+        console.error(err2);
+      })
     }
   }, [videoId]);
-
-  interface VideoPlayerProps {
-    title: string;
-    desc: string;
-    date: {
-      seconds: number;
-      nanoseconds: number;
-    };
-    videoPrefix: string;
-    videoSrc: string;
-  }
-
 
   let title = "";
   let desc = "";
   let date = { seconds: 0, nanoseconds: 0 };
 
   if (payload && payload.data && payload.data.date && typeof payload.data.date === 'object') {
-    console.log("file name is: ", payload.data.title);
     title = payload.data.title;
     desc = payload.data.description;
     date = payload.data.date;
   }
-
-  console.log("Seconds:", date.seconds, "Nanoseconds:", date.nanoseconds);
-
-
- 
+  let user = uploader && uploader.data ? uploader.data : null;
   return (
     <div>
         <h1 className={styles.title}>Watch Page</h1>
-      <VideoPlayer title={title} desc={desc} date={date} videoPrefix={videoPrefix} videoSrc={videoSrc} />
+        {/* TO DO: ADD cloud function to get the user who uploaded the video! */}
+      <VideoPlayer user={user} title={title} desc={desc} date={date} videoPrefix={videoPrefix} videoSrc={videoSrc} />
     </div>
   );
 }

@@ -6,21 +6,27 @@ import SignIn from "./sign-in";
 import styles from "./navbar.module.css";
 import { useEffect, useState } from "react";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
-import { User } from "firebase/auth";
 import Upload from "./upload";
-import { UserProfile } from "./user";
+import { UserProfilePicture } from "./user";
+import { useUser } from "../context/UserContext";
+import getRandomGreeting from "./greetings/greetings"
 
 function NavBar() {
   // Initialise user state
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useUser();
   const [profilePicture, setProfilePicture] = useState('');
+  const [greeting, setGreeting] = useState('');
 
+  // Display a greeting to the user on refresh
+  useEffect(() => {
+    const randomGreeting = getRandomGreeting();
+    setGreeting(randomGreeting);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedHelper((user) => {
       setUser(user);
       console.log(user);
-      console.log('This is their photo link: ',user?.photoURL)
       const pictureURL = user?.photoURL;
       if (pictureURL) {
         setProfilePicture(pictureURL);
@@ -29,7 +35,7 @@ function NavBar() {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [] /* No dependencies, never rerun */);
+  }, [setUser]);
 
   return (
     <nav className={styles.nav}>
@@ -39,7 +45,8 @@ function NavBar() {
         </span>
       </Link>
       <div className={styles.userActions}>
-        {user && <UserProfile profilePicture ={profilePicture}/>}
+        <>{greeting}</>
+        {user && <UserProfilePicture profilePicture ={profilePicture}/>}
         {user && <Upload />}
         <SignIn user={user} />
       </div>

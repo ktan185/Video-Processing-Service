@@ -1,7 +1,10 @@
+'use client'
+
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
+import { UserProfile } from "../navbar/user";
 
 export interface Video {
   id?: string,
@@ -13,6 +16,7 @@ export interface Video {
 }
 
 interface VideoDetailsProps {
+  user: any;
   title: string;
   description: string;
   date: string;
@@ -25,50 +29,73 @@ export const Thumbnail = ({ video }: { video: Video }) => {
   }
 
   return (
-    <Link className = {styles.link} href={`/watch?v=${video.filename}`}>
+    <Link href={`/watch?v=${video.filename}`} className={styles.link}>
+      <>
         <Image src='/thumbnail.png' alt='Thumbnail' width={120} height={80}
           className={styles.thumbnail} />
         <p className={styles.thumbnailTitle}>{video.title}</p>
+      </>
     </Link>
   );
-}
+};
+
 
 export const VideoPlayer = (props: any) => {
+  const user = props.user;
   const title = props.title;
   const date = props.date
   const desc = props.desc;
 
-  const uploadDate = convertTimestampToDate(date.seconds, date.nanoseconds)
+  const uploadDate = convertTimestampToDate(date._seconds, date._nanoseconds)
 
   return (
     <div className={styles.videoBackground}>
       <video controls src={props.videoPrefix + props.videoSrc} />
-      <VideoDetails title={title} description={desc} date={uploadDate} />
+      <VideoDetails user={user} title={title} description={desc} date={uploadDate} />
     </div>
   );
 };
 
 
-export const VideoDetails: React.FC<VideoDetailsProps> = ({ title, description, date }) => {
+export const VideoDetails: React.FC<VideoDetailsProps> = (props) => {
+
+  const user = props.user;
+  let displayName = user && user.displayName ? user.displayName : '';
+  let profilePicture = user && user.photoUrl ? user.photoUrl : '';
+   
   return (
     <div className="videoDetails">
-      <h2 className={styles.title}>{title}</h2>
+      <h2 className={styles.title}>{props.title}</h2>
       <div className={styles.description}>
-        <p>
-          Date Uploaded: <strong>{date}</strong>
-        </p>
-        <p>
-          {description}
-        </p>
+          <UserProfile displayName={displayName} profilePicture={profilePicture}/>
+          Date Uploaded: <br/> {props.date}
+          <br/>
+          <br/>
+          Description: <br/> {props.description}
       </div>
     </div>
   );
 }
 
-function convertTimestampToDate(seconds: number, nanoseconds: number): string {
-  const milliseconds = seconds * 1000 + nanoseconds / 1000000;
-  const date = new Date(milliseconds);
-  return date.toString();
+function convertTimestampToDate(seconds: number, nanoseconds: number) {
+
+  // If the time is yet to be loaded, don't call function.
+  if (!seconds || !nanoseconds) return '';
+  // Validate input
+  if (typeof seconds !== 'number' || typeof nanoseconds !== 'number') {
+    console.error('Invalid timestamp values:', { seconds, nanoseconds });
+    return 'Invalid date'; // Return a default message or handle as needed
+  }
+
+  try {
+    const milliseconds = seconds * 1000 + nanoseconds / 1000000;
+    const date = new Date(milliseconds);
+    return date.toISOString().split('T')[0];
+  } catch (error) {
+    console.error('Error converting timestamp to date:', error);
+    return 'Invalid date'; // Return a default message or handle as needed
+  }
 }
+
 
 

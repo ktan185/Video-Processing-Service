@@ -1,10 +1,12 @@
 import {httpsCallable} from 'firebase/functions';
 import { functions } from './firebase';
+import { User } from 'firebase/auth';
 
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosFunction = httpsCallable(functions, 'getVideos');
 const getMetaDataFunction = httpsCallable(functions, 'getVideoMetaData');
+const getUserMetadataFunction = httpsCallable(functions, 'getUserMetaData');
 
 export interface Video {
   id?: string,
@@ -49,6 +51,19 @@ export async function getVideoMetadata(data: string): Promise<Video> {
     return result as Video;
   } catch (error) {
     console.error('Error fetching video metadata:', error);
+    throw error;
+  }
+}
+
+export async function getUserMetadata(data: string): Promise<any> {
+  try {
+    const result = await getUserMetadataFunction( data ) as any;
+    if (!result) {
+      throw new Error('No metadata found');
+    }
+    return result as any;
+  } catch (error) {
+    console.error('Error fetching video user data:', error);
     throw error;
   }
 }
