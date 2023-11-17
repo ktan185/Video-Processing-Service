@@ -22,14 +22,12 @@ export const SearchBar: React.FC = () => {
 
 		await search();
 
-		// Navigate to search page.
-		// window.location.href = path;
+		//Navigate to search page.
+		window.location.href = path;
 	};
 	
 	const search = async () => {
-
 		if (!query) return;
-
 		try {
 			const result = await index.search(query);
       const objectIdsArray = result.hits.map((hit) => hit.objectID);

@@ -1,11 +1,10 @@
 import {httpsCallable} from 'firebase/functions';
 import { functions } from './firebase';
-import { User } from 'firebase/auth';
-
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosFunction = httpsCallable(functions, 'getVideos');
 const getMetaDataFunction = httpsCallable(functions, 'getVideoMetaData');
+const getSpecificVideosFunction = httpsCallable(functions, 'getSpecificVideos')
 const getUserMetadataFunction = httpsCallable(functions, 'getUserMetaData');
 
 export interface Video {
@@ -41,6 +40,18 @@ export async function getVideos() {
   return response.data as Video[];
 }
 
+export async function getSearchResults(data: any): Promise<Video[]> {
+  try {
+    const result = await getSpecificVideosFunction(data);
+    if (!result) {
+      throw new Error('No videos found');
+    }
+    return result.data as Video[]
+  } catch (error) {
+    console.error('Error searching for videos:', error);
+    throw error;
+  }
+}
 
 export async function getVideoMetadata(data: string): Promise<Video> {
   try {
@@ -67,5 +78,7 @@ export async function getUserMetadata(data: string): Promise<any> {
     throw error;
   }
 }
+
+
 
 
