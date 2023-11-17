@@ -10,6 +10,16 @@
 
 # Tech Stack
 - Frontend: TypeScript, JavaScript, CSS
-- Backend: Cloud Functions on Firebase
-- Database: Firestore for document storage
+- Backend: Cloud Functions on Firebase, video processing containerised with Docker and deployed on Google Cloud.
+- Database: Firestore document storage
 - Storage: Google Cloud Buckets for raw and processed videos
+
+# Dependencies
+- Please refer to package.json
+
+## Usage
+Here's how to use the application:
+- Step 1: clone repo
+- Step 2: navigate to yt-web-client-new
+- Step 3: run the following commands in CLI: npm install, npm run build, npm run start
+
