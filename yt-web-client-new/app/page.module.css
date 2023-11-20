@@ -1,6 +1,7 @@
 .videosGrid {
   display: grid;
-  margin-left: 20px;
+  margin-left: 15px;
+  margin-right: 0px;
   margin-bottom: auto;
   grid-template-columns: repeat(5, 1fr); /* Creates 3 columns */
   justify-content: center;

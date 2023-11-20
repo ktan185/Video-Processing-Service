@@ -19,6 +19,7 @@ export const SearchBar: React.FC = () => {
 
 	const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		if (!query) return;
 		// Locally store the searched videos.
 		await search();
 		//Navigate to search page.
@@ -26,7 +27,6 @@ export const SearchBar: React.FC = () => {
 	};
 	
 	const search = async () => {
-		if (!query) return;
 		try {
 			const result = await index.search(query);
 			const videoArray = result.hits as Array<Video>;
