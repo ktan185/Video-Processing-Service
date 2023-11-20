@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import styles from './searchbar.module.css';
+import { Video } from '@/app/video/video';
 
 interface AlgoliaHit {
   objectID: string; // Ensure this matches the property name from Algolia
@@ -28,11 +29,14 @@ export const SearchBar: React.FC = () => {
 		if (!query) return;
 		try {
 			const result = await index.search(query);
-      const objectIdsArray = result.hits.map((hit) => hit.objectID);
-			console.log("Here are the objectIds found:", objectIdsArray);
-      // Store the array locally in the browser.
-      if (objectIdsArray !== null && objectIdsArray !== undefined) {
-        localStorage.setItem('searchArray', JSON.stringify(objectIdsArray));
+			const videoArray = result.hits as Array<Video>;
+			// Get the video URLs
+      const URLArray = videoArray.map((video) => [video.filename, video.title]);
+			console.log(URLArray)
+      
+			// Store the array locally in the browser.
+      if (URLArray !== null) {
+        localStorage.setItem('searchArray', JSON.stringify(URLArray));
       }
 		} catch (error) {
 			console.error('Search error:', error);
@@ -40,7 +44,7 @@ export const SearchBar: React.FC = () => {
 	}
 
 	return (
-		<div>
+		<div className={styles.search}>
 			<form className={styles.searchContainer} onSubmit={handleSearch}>
 				<input className={styles.searchInput}
 					type="text"

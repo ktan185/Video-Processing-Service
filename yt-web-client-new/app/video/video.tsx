@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import React, { Fragment, useEffect, useState } from "react";
+import React from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
 import { UserProfile } from "../navbar/user";

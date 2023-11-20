@@ -23,7 +23,8 @@
   /* Rounded corners for bubble effect */
   padding: 10px;
   /* Space inside the bubble */
-  margin: 1px;
+  margin: 0px;
+  margin-left: 20px;
   color: black;
   font-family: Arial, sans-serif;
   font-size: 20px;
@@ -34,8 +35,8 @@
 
 .title {
   width: inherit;
-  background-color: #b6b3b3; /* Light grey background, change as needed */
-  border-radius: 15px; /* Rounded corners for bubble effect */
+  background-color: #c9c6c6; /* Light grey background, change as needed */
+  border-radius: 12px; /* Rounded corners for bubble effect */
   padding: 10px; /* Space inside the bubble */
   margin: 1px;
   margin-bottom: 3px;
@@ -48,7 +49,7 @@
 .description {
   width: inherit;
   background-color: #d5d5d5; /* Light grey background, change as needed */
-  border-radius: 15px; /* Rounded corners for bubble effect */
+  border-radius: 12px; /* Rounded corners for bubble effect */
   padding: 10px; /* Space inside the bubble */
   margin: 1px;
   color: black;
