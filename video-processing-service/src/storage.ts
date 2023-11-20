@@ -52,7 +52,7 @@ export async function downloadRawVideo(fileName: string) {
     .file(fileName)
     .download({ destination: `${localRawVideoPath}/${fileName}` });
 
-  console.log(`gs://${rawVideoBucketName}/${fileName} downloaded to ${localProcessedVideoPath}/${fileName}`);
+  console.log(`gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}`);
 
 }
 
@@ -79,16 +79,18 @@ export async function uploadProcessedVideo(fileName: string) {
  * {@link localThumbnailPath} folder into the {@link thumbnailBucketName}.
  * @returns A promise that resolves when the file has been uploaded.
  */
-export async function uploadThumbnail(fileName: string) {
+export async function uploadThumbnail(thumbnailPath: string) {
   const bucket = storage.bucket(thumbnailBucketName);
 
-  await bucket.upload(`${localThumbnailPath}/${fileName}`, {
-    destination: fileName
+  const destination = thumbnailPath.split('/')[1];
+
+  await bucket.upload(thumbnailPath, {
+    destination: destination
   });
   console.log(
-    `${localThumbnailPath}/${fileName} uploaded to gs://${thumbnailBucketName}/${fileName}.`
+    `${thumbnailPath} uploaded to gs://${thumbnailBucketName}/${destination}.`
   );
-  await bucket.file(fileName).makePublic();
+  await bucket.file(destination).makePublic();
 }
 
 /**
@@ -97,8 +99,8 @@ export async function uploadThumbnail(fileName: string) {
  * @param thumbnailName - The name of the thumbnail file to create.
  * @returns A promise that resolves when the thumbnail has been created.
  */
-export async function generateRandomThumbnail(fileName: string): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
+export async function generateRandomThumbnail(fileName: string): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
     // Get the duration of the video
     ffmpeg.ffprobe(`${localProcessedVideoPath}/${fileName}`, (err, metadata) => {
       if (err) {
@@ -120,11 +122,13 @@ export async function generateRandomThumbnail(fileName: string): Promise<void> {
         .screenshots({
           timestamps: [randomTime],
           folder: localThumbnailPath,
+          filename: `thumbnail-${fileName}.png`,
           size: '320x240'
         })
         .on('end', () => {
-          console.log(`Thumbnail generated: ${localThumbnailPath}/${fileName}`);
-          resolve();
+          const thumbnailPath = `${localThumbnailPath}/thumbnail-${fileName}.png`;
+          console.log(`Thumbnail generated: ${thumbnailPath}`);
+          resolve(thumbnailPath);
         })
         .on('error', (err) => {
           console.log(`An error occurred: ${err.message}`);

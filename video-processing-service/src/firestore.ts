@@ -39,6 +39,13 @@ export function setVideo(videoID: string, video: Video) {
     .set(video, {merge: true});
 }
 
+export function setThumbnail(videoID: string, path: any) {
+  return firestore
+    .collection(thumbnailCollectionId)
+    .doc(videoID)
+    .set(path, {merge: true});
+}
+
 export async function isVideoNew(videoId: string) {
   const video = await getVideo(videoId);
   return video?.status === undefined;

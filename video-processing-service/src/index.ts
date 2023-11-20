@@ -9,7 +9,7 @@ import {
   setupDirectories, 
   uploadProcessedVideo, 
   uploadThumbnail } from "./storage";
-import { isVideoNew, setVideo } from "./firestore";
+import { isVideoNew, setThumbnail, setVideo } from "./firestore";
 
 setupDirectories();
 
@@ -56,10 +56,12 @@ app.post("/process-video", async (req, res) => {
     await uploadProcessedVideo(outputFileName);
 
     // Create a thumbnail from the processed video.
-    await generateRandomThumbnail(outputFileName);
+    const thumbnailPath = await generateRandomThumbnail(outputFileName);
 
     // Upload the thumbnail to Cloud Storage.
-    await uploadThumbnail(outputFileName);
+    await uploadThumbnail(thumbnailPath);
+
+    console.log("Thumbnail uploaded sucessfully")
 
     // Update the Firestore document to reflect that processing the video is complete.
     await setVideo(videoId, {
@@ -69,10 +71,19 @@ app.post("/process-video", async (req, res) => {
       status: 'processed' // Update status to 'processed'
     });
 
+    console.log("Video document stored.")
+
+    // Update the Firestore document for thumbnail.
+    await setThumbnail(videoId, {
+      path: thumbnailPath
+    });
+
+    console.log("Thumbnail document stored.")
+
     await Promise.all([
       deleteRawVideo(inputFileName),
       deleteProcessedVideo(outputFileName),
-      deleteThumbnail(outputFileName)
+      deleteThumbnail(`thumbnail-${outputFileName}.png`)
     ]);
 
     return res.status(200).send(`Video processed successfully.`);
@@ -81,7 +92,8 @@ app.post("/process-video", async (req, res) => {
 
     await Promise.all([
       deleteRawVideo(inputFileName),
-      deleteProcessedVideo(outputFileName)
+      deleteProcessedVideo(outputFileName),
+      deleteThumbnail(`thumbnail-${outputFileName}.png`)
     ]);
 
     // Update the Firestore document to reflect the error
