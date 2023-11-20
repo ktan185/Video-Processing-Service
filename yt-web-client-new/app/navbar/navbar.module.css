@@ -1,16 +1,19 @@
 .nav {
+  width: auto;
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1em;
+  justify-content: space-between;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .logo {
-  width: 120px;
+  width: 200px;
   /* height: 3dvb; */
-  background-color: #b6b3b3;
+  background-color: rgb(139, 138, 138);
   /* Light grey background, change as needed */
-  border-radius: 15px;
+  border-radius: 28px;
   /* Rounded corners for bubble effect */
   padding: 15px;
   /* Space inside the bubble */
@@ -21,6 +24,16 @@
   /* Adjust font size as needed */
   word-break: break-word;
   /* Ensures text breaks to prevent overflow */
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease; 
+}
+
+.logo:hover {
+  /* Hover styles */
+  background-color: #656565; /* Darker background on hover */
+  /* Scale up the element a little */
+  transform: scale(1.05) translateZ(50px);
+  /* Optional: Adjust the box-shadow for more depth */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
 .function {
@@ -33,9 +46,23 @@
   /* Increase gap if needed */
 }
 
-.userActions {
+.rightSide {
   display: flex;
-  align-items: center; /* Vertically aligns flex items */
-  justify-content: flex-end; /* Aligns flex items to the end of the container */
-  /* Other styling as necessary */
+  align-items: center; /* This will align the items vertically in the center */
 }
+
+.wave span {
+  display: inline-block;
+  animation: wave-animation 2s ease-in-out infinite;
+}
+
+@keyframes wave-animation {
+  0%, 40%, 100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-10px);
+  }
+}
+
+

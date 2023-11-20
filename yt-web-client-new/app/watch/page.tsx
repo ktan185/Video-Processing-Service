@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'
 import { VideoPlayer } from '../video/video';
-import { getVideoMetadata, getUserMetadata } from '../firebase/functions';
-import styles from "./page.module.css"
+import { getUserMetadata, getVideoMetadata } from '../firebase/functions';
+import styles from "../page.module.css"
 
 export default function Watch() {
   const videoPrefix = 'https://storage.googleapis.com/snupsb-yt-processed-videos/';
@@ -47,7 +47,6 @@ export default function Watch() {
   return (
     <div>
         <h1 className={styles.title}>Watch Page</h1>
-        {/* TO DO: ADD cloud function to get the user who uploaded the video! */}
       <VideoPlayer user={user} title={title} desc={desc} date={date} videoPrefix={videoPrefix} videoSrc={videoSrc} />
     </div>
   );

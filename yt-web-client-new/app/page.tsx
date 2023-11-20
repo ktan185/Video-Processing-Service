@@ -11,14 +11,13 @@ export default async function Home() {
   return (
     <main>
       <h1 className={styles.title}>Home Page</h1>
-      <div className= {styles.videosGrid}>
-        {videos.map((video) => (
-          // Make sure to pass the video object to the Thumbnail component
-          // and provide a unique key prop for each mapped item
-          <Thumbnail key={video.id} video={video} />
-        ))}
-      </div>
-     
+        <div className={styles.videosGrid}>
+          {videos.map((video, index) => (
+            // Make sure to pass the video object to the Thumbnail component
+            // and provide a unique key prop for each mapped item
+            <Thumbnail key={index} video={video} />
+          ))}
+        </div>
     </main>
   )
 }

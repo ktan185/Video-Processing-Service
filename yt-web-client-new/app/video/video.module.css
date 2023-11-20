@@ -1,27 +1,18 @@
-.videosGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust min size as needed */
-  gap: 50px; /* Increase gap if needed */
-  align-items: start;
-}
-
-.videoItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1px;
-  padding: 1px; /* Adjust padding if needed */
-}
-
 .thumbnail {
-  margin: 5px;
-  border: 1px solid red;
+  /* margin: 5px; */
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  margin: 0px;
 }
 
 .thumbnailTitle {
   color: black;
-  margin-top: 1px;
-  font-size: 14px; /* Adjust font size as needed, with proper unit */
+  margin-top: 0px;
+  margin-left: 10px;
+  font-size: 16px; /* Adjust font size as needed, with proper unit */
   word-break: break-word; /* Ensures text breaks to prevent overflow */
 }
 
@@ -33,7 +24,8 @@
   /* Rounded corners for bubble effect */
   padding: 10px;
   /* Space inside the bubble */
-  margin: 1px;
+  margin: 0px;
+  margin-left: 20px;
   color: black;
   font-family: Arial, sans-serif;
   font-size: 20px;
@@ -44,32 +36,49 @@
 
 .title {
   width: inherit;
-  background-color: #b6b3b3; /* Light grey background, change as needed */
-  border-radius: 15px; /* Rounded corners for bubble effect */
+  background-color: #c9c6c6; /* Light grey background, change as needed */
+  border-radius: 12px; /* Rounded corners for bubble effect */
   padding: 10px; /* Space inside the bubble */
   margin: 1px;
   margin-bottom: 3px;
   color: black;
   font-family: Arial, sans-serif;
-  font-size: 20px; /* Adjust font size as needed */
+  font-size: 30px; /* Adjust font size as needed */
   word-break: break-word; /* Ensures text breaks to prevent overflow */
 }
 
 .description {
   width: inherit;
   background-color: #d5d5d5; /* Light grey background, change as needed */
-  border-radius: 15px; /* Rounded corners for bubble effect */
+  border-radius: 12px; /* Rounded corners for bubble effect */
   padding: 10px; /* Space inside the bubble */
+  padding-top: 1px;
   margin: 1px;
   color: black;
   font-family: Arial, sans-serif;
-  font-size: 20px; /* Adjust font size as needed */
   word-break: break-word; /* Ensures text breaks to prevent overflow */
-  font-size: 12px; /* Smaller font size for description */
+  font-size: 15px; /* Smaller font size for description */
   /* Other properties will inherit from .title */
 }
 
+.line::after {
+  content: '';
+  display: block;
+  width: auto;
+  height: 1px;
+  background: black;
+  margin-bottom: 10px; /* Distance from the element */
+}
 
 .link {
   text-decoration: none;
 }
+
+.videoWrapper {
+  position: relative;
+  width: 1000px;
+  height: auto;
+  border-radius: 15px;
+  overflow: hidden;
+}
+

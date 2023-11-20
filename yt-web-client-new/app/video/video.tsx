@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import React, { Fragment, useEffect, useState } from "react";
+import React from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
 import { UserProfile } from "../navbar/user";
@@ -30,11 +30,13 @@ export const Thumbnail = ({ video }: { video: Video }) => {
 
   return (
     <Link href={`/watch?v=${video.filename}`} className={styles.link}>
-      <>
-        <Image src='/thumbnail.png' alt='Thumbnail' width={120} height={80}
+        <Image 
+          src='/thumbnail.png' 
+          alt='Thumbnail' 
+          width={285} 
+          height={160}
           className={styles.thumbnail} />
         <p className={styles.thumbnailTitle}>{video.title}</p>
-      </>
     </Link>
   );
 };
@@ -50,7 +52,11 @@ export const VideoPlayer = (props: any) => {
 
   return (
     <div className={styles.videoBackground}>
-      <video controls src={props.videoPrefix + props.videoSrc} />
+      <video 
+        controls 
+        src={props.videoPrefix + props.videoSrc} 
+        className={styles.videoWrapper}
+        />
       <VideoDetails user={user} title={title} description={desc} date={uploadDate} />
     </div>
   );
@@ -67,11 +73,13 @@ export const VideoDetails: React.FC<VideoDetailsProps> = (props) => {
     <div className="videoDetails">
       <h2 className={styles.title}>{props.title}</h2>
       <div className={styles.description}>
-          <UserProfile displayName={displayName} profilePicture={profilePicture}/>
-          Date Uploaded: <br/> {props.date}
-          <br/>
-          <br/>
-          Description: <br/> {props.description}
+          <p className={styles.line}>
+          <UserProfile 
+            displayName={displayName} 
+            profilePicture={profilePicture}/>
+            Date Uploaded: {props.date}
+          </p>
+          <p>Description: <br/>{props.description}</p>
       </div>
     </div>
   );

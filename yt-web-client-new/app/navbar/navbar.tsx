@@ -12,6 +12,12 @@ import { useUser } from "../context/UserContext";
 import getRandomGreeting from "./greetings/greetings"
 import SearchBar from "./searchbar/searchbar";
 
+function createWaveText(text: string) {
+  return text.split('').map((char, index) => (
+    <span key={index} style={{ animationDelay: `${index * 0.1}s` }}>{char}</span>
+  ));
+}
+
 function NavBar() {
   // Initialise user state
   const { user, setUser } = useUser();
@@ -46,8 +52,8 @@ function NavBar() {
         </span>
       </Link>
       <SearchBar/>
-      <div className={styles.userActions}>
-        {user && greeting}
+      <div className={styles.rightSide}>
+        {user && <p className={styles.wave}>{createWaveText(greeting)}</p>}
         {user && <UserProfilePicture profilePicture={profilePicture}/>}
         {user && <Upload />}
         <SignIn user={user} />
