@@ -17,18 +17,25 @@ export default function Search() {
   }, []);
 
   const SearchList: React.FC<{ videos: Video[] }> = ({ videos }) => {
+    const navigateToVideo = (videoId: string) => {
+      // You can use 'useRouter' from 'next/router' for client-side transitions,
+      // or 'window.location.href' for a full page refresh.
+      window.location.href = `/watch?v=${videoId}`;
+    };
+
     return (
       <>
         {videos.map((video) => (
-          <Link key={video[0]} href={`/watch?v=${video[0]}`} className={styles.link}>
-            <Image priority 
-              src='/thumbnail.png' 
-              alt='Thumbnail' 
-              width={256} 
-              height={144} 
+          <div key={video[0]} onClick={() => navigateToVideo(video[0])} className={styles.link} style={{ cursor: 'pointer' }}>
+            <Image
+              priority
+              src='/thumbnail.png'
+              alt='Thumbnail'
+              width={310}
+              height={200}
               className={styles.thumbnail} />
             <p className={styles.thumbnailTitle}>{video[1]}</p>
-          </Link>
+          </div>
         ))}
       </>
     );

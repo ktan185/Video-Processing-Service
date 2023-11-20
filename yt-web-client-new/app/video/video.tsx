@@ -28,16 +28,20 @@ export const Thumbnail = ({ video }: { video: Video }) => {
     return null; // Renders nothing if video is not available or not processed
   }
 
+  const navigateToVideo = () => {
+    window.location.href = `/watch?v=${video.filename}`;
+  };
+
   return (
-    <Link href={`/watch?v=${video.filename}`} className={styles.link}>
-        <Image 
-          src='/thumbnail.png' 
-          alt='Thumbnail' 
-          width={285} 
-          height={160}
-          className={styles.thumbnail} />
-        <p className={styles.thumbnailTitle}>{video.title}</p>
-    </Link>
+    <div onClick={navigateToVideo} className={styles.thumbnailContainer}>
+      <Image
+        src='/thumbnail.png'
+        alt='Thumbnail'
+        width={310}
+        height={200}
+        className={styles.thumbnail} />
+      <p className={styles.thumbnailTitle}>{video.title}</p>
+    </div>
   );
 };
 
