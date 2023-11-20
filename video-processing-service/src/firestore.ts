@@ -15,6 +15,7 @@ const firestore = new Firestore();
 } */
 
 const videoCollectionId = 'videos';
+const thumbnailCollectionId = 'thumbnails';
 
 export interface Video {
   id?: string,
@@ -36,7 +37,6 @@ export function setVideo(videoID: string, video: Video) {
     .collection(videoCollectionId)
     .doc(videoID)
     .set(video, {merge: true});
-
 }
 
 export async function isVideoNew(videoId: string) {

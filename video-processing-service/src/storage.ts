@@ -1,16 +1,16 @@
 import { Storage } from '@google-cloud/storage';
 import fs from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
-import { resolve } from 'path';
-import { rejects } from 'assert';
 
 const storage = new Storage();
 
 const rawVideoBucketName = "snupsb-yt-raw-videos";
 const processedVideoBucketName = "snupsb-yt-processed-videos";
+const thumbnailBucketName = "snupsb-yt-thumbnails";
 
 const localRawVideoPath = "./raw-videos";
 const localProcessedVideoPath = "./processed-videos";
+const localThumbnailPath = "./thumbnails";
 
 /**
  * Creates the local directories for raw and processed videos.
@@ -18,6 +18,7 @@ const localProcessedVideoPath = "./processed-videos";
 export function setupDirectories() {
   ensureDirectoryExistence(localRawVideoPath);
   ensureDirectoryExistence(localProcessedVideoPath);
+  ensureDirectoryExistence(localThumbnailPath);
 }
 
 /** 
@@ -53,7 +54,6 @@ export async function downloadRawVideo(fileName: string) {
 
   console.log(`gs://${rawVideoBucketName}/${fileName} downloaded to ${localProcessedVideoPath}/${fileName}`);
 
-
 }
 
 /**
@@ -72,6 +72,66 @@ export async function uploadProcessedVideo(fileName: string) {
   );
 
   await bucket.file(fileName).makePublic();
+}
+
+/**
+ * @param fileName - The name of the file to upload from the 
+ * {@link localThumbnailPath} folder into the {@link thumbnailBucketName}.
+ * @returns A promise that resolves when the file has been uploaded.
+ */
+export async function uploadThumbnail(fileName: string) {
+  const bucket = storage.bucket(thumbnailBucketName);
+
+  await bucket.upload(`${localThumbnailPath}/${fileName}`, {
+    destination: fileName
+  });
+  console.log(
+    `${localThumbnailPath}/${fileName} uploaded to gs://${thumbnailBucketName}/${fileName}.`
+  );
+  await bucket.file(fileName).makePublic();
+}
+
+/**
+ * Generates a thumbnail for a video at a random time interval.
+ * @param fileName - The name of the video file.
+ * @param thumbnailName - The name of the thumbnail file to create.
+ * @returns A promise that resolves when the thumbnail has been created.
+ */
+export async function generateRandomThumbnail(fileName: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    // Get the duration of the video
+    ffmpeg.ffprobe(`${localProcessedVideoPath}/${fileName}`, (err, metadata) => {
+      if (err) {
+        reject(`Error getting video metadata: ${err.message}`);
+        return;
+      }
+
+      const duration = metadata.format.duration;
+      if (!duration) {
+        reject("Could not determine video duration.");
+        return;
+      }
+
+      // Generate a random time within the video duration
+      const randomTime = Math.floor(Math.random() * duration);
+
+      // Capture a frame at the random time
+      ffmpeg(`${localProcessedVideoPath}/${fileName}`)
+        .screenshots({
+          timestamps: [randomTime],
+          folder: localThumbnailPath,
+          size: '320x240'
+        })
+        .on('end', () => {
+          console.log(`Thumbnail generated: ${localThumbnailPath}/${fileName}`);
+          resolve();
+        })
+        .on('error', (err) => {
+          console.log(`An error occurred: ${err.message}`);
+          reject(err);
+        });
+    });
+  });
 }
 
 /** 
@@ -97,7 +157,6 @@ function deleteFile(filePath: string): Promise<void> {
   });
 }
 
-
 /**
  * @param fileName - The name of the file to delete from the
  * {@link localRawVideoPath} folder.
@@ -107,7 +166,6 @@ function deleteFile(filePath: string): Promise<void> {
 export function deleteRawVideo(fileName: string) {
   return deleteFile(`${localRawVideoPath}/${fileName}`);
 }
-
 
 /**
 * @param fileName - The name of the file to delete from the
@@ -120,6 +178,16 @@ export function deleteProcessedVideo(fileName: string) {
 }
 
 /**
+* @param fileName - The name of the file to delete from the
+* {@link localThumbnailPath} folder.
+* @returns A promise that resolves when the file has been deleted.
+* 
+*/
+export function deleteThumbnail(fileName: string) {
+  return deleteFile(`${localThumbnailPath}/${fileName}`);
+}
+
+/**
  * Ensures that the directory exists, create it if necessary.
  * @param {string} direPath - The path of the directory to check.
  */
@@ -128,5 +196,4 @@ function ensureDirectoryExistence(direPath: string) {
     fs.mkdirSync(direPath, { recursive: true });
     console.log(`Created directory at ${direPath}`);
   }
-
 }
