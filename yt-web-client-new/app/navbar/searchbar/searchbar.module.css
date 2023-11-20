@@ -3,35 +3,40 @@
   margin: 10px;
   display: flex;
   align-items: center;
-  border-radius: 25px; /* Set the border radius here */
-  background-color: #b7b7b8; /* Match the button color */
-  border: 1px solid #ccc; /* Border to match the input */
+  border-radius: 25px;
+  background-color: #b7b7b8;
+  border: 1px solid #ccc;
 }
 
 /* Styles for the search input */
 .searchInput {
-  flex-grow: 1; /* Allow input to fill the space */
-  padding: 10px 20px; /* Adjust padding to fit your design */
-  border: none; /* Remove the individual border */
+  flex-grow: 1;
+  padding: 10px 20px;
+  border: none;
   outline: none;
   font-size: 16px;
-  border-radius: 25px 0 0 25px; /* Round only the left side */
-  background-color: #474747; /* White background */
+  border-radius: 25px 0 0 25px;
+  background-color: #474747;
   width: 500px;
+}
+
+/* Media Query */
+@media (max-width: 1200px) {
+  .searchInput {
+    width: 300px;
+  }
 }
 
 /* Styles for the search button */
 .searchButton {
   border: none;
   padding: 10px 20px;
-  border-radius: 0 25px 25px 0; /* Round only the right side */
+  border-radius: 0 25px 25px 0;
   background-color: #b7b7b8;
   color: #000000;
   cursor: pointer;
-  /* Removing the margin as the button will be inside the container */
 }
 
-/* Adjust the hover effect for the search button */
 .searchButton:hover {
   background-color: #949494;
 }
