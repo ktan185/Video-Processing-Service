@@ -20,7 +20,8 @@
   align-items: center;  
   justify-content: left;
   gap: 5px;
-  margin-bottom: 5px;
+  margin-top: 0px;
+  margin-bottom: 10px;
 }
 
 .videoPicture img {
@@ -29,7 +30,6 @@
   border-radius: 50px; /* Maintain the circular shape */
   object-fit: cover; /* This will ensure the image covers the area without stretching */
   object-position: center; /* Align the image nicely in the center */
-  margin: 1px;
   padding: 0.4px;
 }
 
