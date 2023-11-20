@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getSearchResults } from '../firebase/functions';
-import styles from './page.module.css'
+import styles from '../page.module.css'
 import { Thumbnail, Video } from '../video/video';
 
 export default function Search() {
@@ -31,10 +31,12 @@ export default function Search() {
 
   return (
     <div>
-        <h1 className={styles.title}>Search Results</h1>
-        {videos.map(video => (
-          <Thumbnail key={video.id} video={video} />
-        ))}
+      <h1 className={styles.title}>Search Results</h1>
+        <div className={styles.videosGrid}>
+          {videos.map(video => (
+            <Thumbnail key={video.id} video={video} />
+          ))}
+        </div>
     </div>
   );
 }

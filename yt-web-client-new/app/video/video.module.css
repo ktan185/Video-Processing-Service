@@ -1,27 +1,17 @@
-.videosGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust min size as needed */
-  gap: 50px; /* Increase gap if needed */
-  align-items: start;
-}
-
-.videoItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1px;
-  padding: 1px; /* Adjust padding if needed */
-}
-
 .thumbnail {
-  margin: 5px;
-  border: 1px solid red;
+  margin: 10px;
+  border: 1px solid rgb(0, 0, 0);
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center; /* If there is text below the thumbnails, it will also be centered */
 }
 
 .thumbnailTitle {
   color: black;
-  margin-top: 1px;
-  font-size: 14px; /* Adjust font size as needed, with proper unit */
+  margin-top: -5px;
+  margin-left: 15px;
+  font-size: 16px; /* Adjust font size as needed, with proper unit */
   word-break: break-word; /* Ensures text breaks to prevent overflow */
 }
 

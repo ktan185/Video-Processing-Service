@@ -30,11 +30,9 @@ export const Thumbnail = ({ video }: { video: Video }) => {
 
   return (
     <Link href={`/watch?v=${video.filename}`} className={styles.link}>
-      <>
-        <Image src='/thumbnail.png' alt='Thumbnail' width={120} height={80}
+        <Image src='/thumbnail.png' alt='Thumbnail' width={256} height={144}
           className={styles.thumbnail} />
         <p className={styles.thumbnailTitle}>{video.title}</p>
-      </>
     </Link>
   );
 };

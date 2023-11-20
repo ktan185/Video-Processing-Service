@@ -46,7 +46,7 @@ function NavBar() {
         </span>
       </Link>
       <SearchBar/>
-      <div className={styles.userActions}>
+      <div className={styles.rightSide}>
         {user && greeting}
         {user && <UserProfilePicture profilePicture={profilePicture}/>}
         {user && <Upload />}

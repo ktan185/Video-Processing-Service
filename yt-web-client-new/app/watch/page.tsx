@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'
 import { VideoPlayer } from '../video/video';
-import { getVideoMetadata, getUserMetadata } from '../firebase/functions';
-import styles from "./page.module.css"
+import { getUserMetadata, getVideoMetadata } from '../firebase/functions';
+import styles from "../page.module.css"
 
 export default function Watch() {
   const videoPrefix = 'https://storage.googleapis.com/snupsb-yt-processed-videos/';
