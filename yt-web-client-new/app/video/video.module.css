@@ -1,16 +1,17 @@
 .thumbnail {
-  margin: 10px;
+  /* margin: 5px; */
   border: 1px solid rgb(0, 0, 0);
+  border-radius: 15px;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  text-align: center; /* If there is text below the thumbnails, it will also be centered */
+  margin: 0px;
 }
 
 .thumbnailTitle {
   color: black;
-  margin-top: -5px;
-  margin-left: 15px;
+  margin-top: 0px;
+  margin-left: 10px;
   font-size: 16px; /* Adjust font size as needed, with proper unit */
   word-break: break-word; /* Ensures text breaks to prevent overflow */
 }
