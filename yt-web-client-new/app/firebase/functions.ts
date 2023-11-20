@@ -32,7 +32,7 @@ export async function uploadVideo(file: File, title: string, description: string
       'Content-Type': file.type
     }
   })
-  return;
+  return response;
 }
 
 export async function getVideos() {
