@@ -1,5 +1,14 @@
 import express from "express";
-import { convertVideo, deleteProcessedVideo, deleteRawVideo, downloadRawVideo, setupDirectories, uploadProcessedVideo } from "./storage";
+import { 
+  convertVideo, 
+  deleteProcessedVideo, 
+  deleteRawVideo, 
+  deleteThumbnail, 
+  downloadRawVideo, 
+  generateRandomThumbnail, 
+  setupDirectories, 
+  uploadProcessedVideo, 
+  uploadThumbnail } from "./storage";
 import { isVideoNew, setVideo } from "./firestore";
 
 setupDirectories();
@@ -46,7 +55,13 @@ app.post("/process-video", async (req, res) => {
     // Upload the processed video to Cloud Storage.
     await uploadProcessedVideo(outputFileName);
 
-    // Update the Firestore document to reflect that processing is complete
+    // Create a thumbnail from the processed video.
+    await generateRandomThumbnail(outputFileName);
+
+    // Upload the thumbnail to Cloud Storage.
+    await uploadThumbnail(outputFileName);
+
+    // Update the Firestore document to reflect that processing the video is complete.
     await setVideo(videoId, {
       id: videoId,
       uid: videoId.split('-')[0],
@@ -54,10 +69,10 @@ app.post("/process-video", async (req, res) => {
       status: 'processed' // Update status to 'processed'
     });
 
-
     await Promise.all([
       deleteRawVideo(inputFileName),
-      deleteProcessedVideo(outputFileName)
+      deleteProcessedVideo(outputFileName),
+      deleteThumbnail(outputFileName)
     ]);
 
     return res.status(200).send(`Video processed successfully.`);
