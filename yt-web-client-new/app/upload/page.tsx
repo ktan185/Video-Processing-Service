@@ -10,8 +10,9 @@ export default function Upload() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [file, setFile] = useState<File | null>(null);
+  const [disabled, setDisabled] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(false);
 
   // This handler is for the file input
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,12 +30,19 @@ export default function Upload() {
       alert("Missing title/description or file");
     }
   };
-
+  
   const handleUpload = async (file: File, title: string, description: string) => {
     try {
+      setDisabled(true);
+      setUploadStatus(true);
       // You might need to modify uploadVideo to accept and handle title and description.
       const response = await uploadVideo(file, title, description);
-      console.log(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
+      if (response) {
+        setUploadStatus(false);
+        console.log(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
+        window.location.href = '/';
+      }
+      setDisabled(false);
     } catch (error) {
       alert(`Failed to upload file: ${error}`);
     }
@@ -45,28 +53,26 @@ export default function Upload() {
       <h1 className={styles.title}>Upload Video</h1> 
       <div className={formStyles.formContainer}>
         <form onSubmit={handleSubmit}>
-          <h2>Please select a video to upload</h2>
+          <h2>Select a video to upload</h2>     
+            <input
+              disabled={disabled}
+              id="videoFile"
+              className={formStyles.fileInput}
+              type="file"
+              accept="video/*"
+              required
+              onChange={handleFileChange}/>
+            <h3>*Optional: select a thumbnail</h3>
+            <input
+              disabled={disabled}
+              id="thumbnailFile"
+              className={formStyles.fileInput}
+              type="file"
+              accept="image/*"/>
+          <h3>Provide a title for the video</h3>
           <input
-            id="videoFile"
-            className={formStyles.fileInput}
-            type="file"
-            accept="video/*"
-            required
-            onChange={handleFileChange}
-          />
-          {/* TODO: add progress bar for video and thumbnail upload */}
-          <progress id="uploadProgress" value={uploadProgress} max="100"></progress>
-          <br />
-          <h3>*Optional: select a thumbnail</h3>
-          <input
-            id="thumbnailFile"
-            className={formStyles.fileInput}
-            type="file"
-            accept="image/*"
-          />
-          <br />
-          <h2>Provide a title for the video</h2>
-          <input
+            disabled={disabled}
+            maxLength={100}
             id="title"
             className={formStyles.titleInput}
             type="text"
@@ -76,8 +82,9 @@ export default function Upload() {
             required
           />
           <br />
-          <h2>Provide a description for the video</h2>
+          <h3>Provide a description for the video</h3>
           <textarea
+            disabled={disabled}
             id="description"
             className={formStyles.textInput}
             placeholder="Enter video description"
@@ -85,9 +92,15 @@ export default function Upload() {
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-          <button type="submit" className={formStyles.uploadButton}>
-            Upload
-          </button>
+          <div className={formStyles.loading}>
+            {uploadStatus && <p>Please wait for the video to upload...</p>}
+            <button 
+              disabled={disabled}
+              type="submit" 
+              className={formStyles.uploadButton}>
+              Upload
+            </button>
+          </div>
         </form>
       </div>
     </div>

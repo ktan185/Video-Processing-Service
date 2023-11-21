@@ -7,7 +7,7 @@ import styles from "./navbar.module.css";
 import { useEffect, useState } from "react";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
 import Upload from "./upload/upload";
-import { UserProfilePicture } from "./user/user";
+import { UserProfilePicture } from "./user";
 import { useUser } from "../context/UserContext";
 import getRandomGreeting from "./greetings/greetings"
 import SearchBar from "./searchbar/searchbar";
