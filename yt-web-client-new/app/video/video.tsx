@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
@@ -55,14 +54,14 @@ export const Thumbnail = ({ video }: { video: Video }) => {
 
   return (
     <div onClick={navigateToVideo} className={styles.thumbnailContainer}>
-      <Image
+      {thumbnail && <Image
         priority
         src={thumbnailPrefix + thumbnail}
-        alt='/thumbnail.png'
+        alt="video thumbnail"
         width={310}
         height={200}
-        className={styles.thumbnail} />
-      <p className={styles.thumbnailTitle}>{video.title}</p>
+        className={styles.thumbnail} /> }
+      {thumbnail && <p className={styles.thumbnailTitle}>{video.title}</p>}
     </div>
   );
 };

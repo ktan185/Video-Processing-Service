@@ -23,6 +23,11 @@
   /* Ensures text breaks to prevent overflow */
 }
 
+.results {
+  margin-left: 10px;
+  font-size: 25px;
+}
+
 .thumbnail {
   /* margin: 5px; */
   border: 1px solid rgb(0, 0, 0);
