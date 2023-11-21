@@ -1,20 +1,32 @@
 .thumbnail {
   /* margin: 5px; */
-  border: 1px solid rgb(0, 0, 0);
+  border: 3px solid rgb(192, 192, 192);
   border-radius: 15px;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   margin: 0px;
+  transition: ease all 0.3s;
+}
+
+.thumbnail:hover {
+  border-radius: 0px;
+  transform:scale(1.01);
 }
 
 .thumbnailTitle {
-  color: black;
-  margin-top: 0px;
+  color: rgb(255, 255, 255);
+  font-weight: 300;
   margin-left: 10px;
   font-size: 16px; /* Adjust font size as needed, with proper unit */
   word-break: break-word; /* Ensures text breaks to prevent overflow */
   max-width: 100%;
+  transition: ease all 0.3s;
+}
+
+.thumbnailTitle:hover {
+  border-radius: 0px;
+  transform:scale(1.02);
 }
 
 .thumbnailContainer {
