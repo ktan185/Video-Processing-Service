@@ -1,4 +1,4 @@
-import { signInWithGoogle, signOut } from "../firebase/firebase";
+import { signInWithGoogle, signOut } from "../../firebase/firebase";
 import styles from "./sign-in.module.css";
 import { User } from 'firebase/auth';
 
