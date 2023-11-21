@@ -4,8 +4,9 @@ import { functions } from './firebase';
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosFunction = httpsCallable(functions, 'getVideos');
 const getMetaDataFunction = httpsCallable(functions, 'getVideoMetaData');
-const getSpecificVideosFunction = httpsCallable(functions, 'getSpecificVideos')
+const getSpecificVideosFunction = httpsCallable(functions, 'getSpecificVideos');
 const getUserMetadataFunction = httpsCallable(functions, 'getUserMetaData');
+const getThumbnailFunction = httpsCallable(functions, 'getVideoThumbnail');
 
 export interface Video {
   id?: string,
@@ -38,6 +39,17 @@ export async function uploadVideo(file: File, title: string, description: string
 export async function getVideos() {
   const response = await getVideosFunction();
   return response.data as Video[];
+}
+
+export async function getThumbnail(videoId : string) {
+  try {
+    const response = await getThumbnailFunction(videoId);
+    return response.data as any;
+  } catch (error) {
+    console.error('Error searching for thumbnail', error);
+    throw error;
+  }
+
 }
 
 export async function getSearchResults(data: any): Promise<Video[]> {

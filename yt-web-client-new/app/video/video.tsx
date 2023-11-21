@@ -1,10 +1,13 @@
 'use client'
 
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
 import { UserProfile } from "../navbar/user";
+import { getThumbnail } from "../firebase/functions";
+
+const thumbnailPrefix = 'https://storage.googleapis.com/snupsb-yt-thumbnails/';
 
 export interface Video {
   id?: string,
@@ -24,9 +27,27 @@ interface VideoDetailsProps {
 
 // Component for thumbnails for users to click on to take them to video.
 export const Thumbnail = ({ video }: { video: Video }) => {
+
+  const [thumbnail, setThumbnail] = useState('');
+  
   if (!video || video.status !== "processed") {
     return null; // Renders nothing if video is not available or not processed
-  }
+  } 
+
+  useEffect(() => {
+    const fetchThumbnail = async () => {
+      if (video.id) {
+        try {
+          const response = await getThumbnail(video.id);
+          const file = response.path.split('./thumbnails/')[1];
+          setThumbnail(file);
+        } catch (error) {
+          console.error('Error fetching thumbnail:', error);
+        }
+      }
+    };
+    fetchThumbnail();
+  }, [video?.id]); // Dependency array with video ID
 
   const navigateToVideo = () => {
     window.location.href = `/watch?v=${video.filename}`;
@@ -35,8 +56,9 @@ export const Thumbnail = ({ video }: { video: Video }) => {
   return (
     <div onClick={navigateToVideo} className={styles.thumbnailContainer}>
       <Image
-        src='/thumbnail.png'
-        alt='Thumbnail'
+        priority
+        src={thumbnailPrefix + thumbnail}
+        alt='/thumbnail.png'
         width={310}
         height={200}
         className={styles.thumbnail} />

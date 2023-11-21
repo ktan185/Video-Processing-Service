@@ -7,6 +7,7 @@ export default async function Home() {
 
   // Get an array of 10 videos to display.
   const videos = await getVideos();
+  console.log(videos)
 
   return (
     <main>
