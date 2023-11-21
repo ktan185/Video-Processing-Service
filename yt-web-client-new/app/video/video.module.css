@@ -20,7 +20,7 @@
   margin-left: 10px;
   font-size: 16px; /* Adjust font size as needed, with proper unit */
   word-break: break-word; /* Ensures text breaks to prevent overflow */
-  max-width: 100%;
+  max-width: 310px;
   transition: ease all 0.3s;
 }
 
@@ -30,7 +30,6 @@
 }
 
 .thumbnailContainer {
-  justify-content: left;
   /* Center horizontally */
   align-items: left;
   /* Center vertically */
