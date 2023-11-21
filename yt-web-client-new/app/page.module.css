@@ -28,6 +28,29 @@
   font-size: 25px;
 }
 
+/* Styling for watch page */
+.videoComponents {
+  width: auto;
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.videoPlayerContainer {
+  width: auto;
+  margin: 0px;
+  padding: 0px;
+  flex: 1;
+}
+
+.thumbnailsContainer {
+  width: 320px;
+  display: center;
+  justify-content: center;
+  align-items: center;
+}
+
 .thumbnail {
   /* margin: 5px; */
   border: 1px solid rgb(0, 0, 0);
