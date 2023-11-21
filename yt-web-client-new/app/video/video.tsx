@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from 'next/image'; 
 import styles from "./video.module.css";
-import { UserProfile } from "../navbar/user/user";
+import { UserProfile } from "../navbar/user";
 import { getThumbnail } from "../firebase/functions";
 
 const thumbnailPrefix = 'https://storage.googleapis.com/snupsb-yt-thumbnails/';
