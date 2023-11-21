@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from './navbar/navbar'
-import { UserProfilePicture } from './navbar/user'
+import { UserProfilePicture } from './navbar/user/user'
 import { UserProvider } from './context/UserContext'
 
 const inter = Inter({ subsets: ['latin'] })

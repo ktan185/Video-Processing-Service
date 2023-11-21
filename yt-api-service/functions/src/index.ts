@@ -14,6 +14,7 @@ const rawVideoBucketName = "snupsb-yt-raw-videos";
 
 const userCollectionId = "users";
 const videoCollectionId = "videos";
+const thumbnailCollectionId = "thumbnails";
 
 export interface Video {
   id?: string,
@@ -79,9 +80,50 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 
 export const getVideos = onCall({maxInstances: 1}, async () => {
   const querySnapshot =
-    await firestore.collection(videoCollectionId).limit(10).get();
+    await firestore.collection(videoCollectionId).limit(20).get();
     // TODO, need pagination (offset)
   return querySnapshot.docs.map((doc) => doc.data());
+});
+
+export const getVideoThumbnail = onCall({maxInstances: 1}, async (request) => {
+  const videoId = request.data;
+  if (!videoId) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function must be called with a valid videoId."
+    );
+  }
+
+  // Attempt to retrieve the thumbnail path from the Firestore database
+  try {
+    const thumbRef = firestore.collection(thumbnailCollectionId).doc(videoId);
+    const doc = await thumbRef.get();
+
+    if (!doc.exists) {
+      throw new functions.https.HttpsError(
+        "not-found",
+        "The requested video does not exist."
+      );
+    }
+
+    const thumbnailPath = doc.data();
+
+    // Check if the path actual exists
+    if (!thumbnailPath) {
+      throw new functions.https.HttpsError(
+        "data-loss",
+        "The path is missing."
+      );
+    }
+    // Return the video metadata
+    return thumbnailPath;
+  } catch (error) {
+    logger.error("Error fetching thumbnail: ", error);
+    throw new functions.https.HttpsError(
+      "unknown",
+      "An error occurred while fetching thumbnail"
+    );
+  }
 });
 
 export const getSpecificVideos = onCall({maxInstances: 1}, async (request) => {

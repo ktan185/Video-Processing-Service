@@ -82,7 +82,7 @@ export async function uploadProcessedVideo(fileName: string) {
 export async function uploadThumbnail(thumbnailPath: string) {
   const bucket = storage.bucket(thumbnailBucketName);
 
-  const destination = thumbnailPath.split('/')[1];
+  const destination = thumbnailPath.split('./thumbnails/')[1];
 
   await bucket.upload(thumbnailPath, {
     destination: destination
@@ -122,11 +122,11 @@ export async function generateRandomThumbnail(fileName: string): Promise<string>
         .screenshots({
           timestamps: [randomTime],
           folder: localThumbnailPath,
-          filename: `thumbnail-${fileName}.png`,
+          filename: `${fileName}.png`,
           size: '320x240'
         })
         .on('end', () => {
-          const thumbnailPath = `${localThumbnailPath}/thumbnail-${fileName}.png`;
+          const thumbnailPath = `${localThumbnailPath}/${fileName}.png`;
           console.log(`Thumbnail generated: ${thumbnailPath}`);
           resolve(thumbnailPath);
         })

@@ -26,17 +26,15 @@ export const SearchBar: React.FC = () => {
 		window.location.href = path;
 	};
 	
-	const search = async () => {
+	const search = async () => {	
 		try {
+			// Save result as a video object for easier data retrival.
 			const result = await index.search(query);
 			const videoArray = result.hits as Array<Video>;
-			// Get the video URLs
-      const URLArray = videoArray.map((video) => [video.filename, video.title]);
-			console.log(URLArray)
-      
+			
 			// Store the array locally in the browser.
-      if (URLArray !== null) {
-        localStorage.setItem('searchArray', JSON.stringify(URLArray));
+      if (videoArray !== null) {
+        localStorage.setItem('searchArray', JSON.stringify(videoArray));
       }
 		} catch (error) {
 			console.error('Search error:', error);
