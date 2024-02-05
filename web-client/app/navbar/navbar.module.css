@@ -9,22 +9,23 @@
 }
 
 .logo {
-  width: 200px;
+  width: 50px;
   /* height: 3dvb; */
   background-color: rgb(139, 138, 138);
   /* Light grey background, change as needed */
-  border-radius: 28px;
+  border-radius: 15px;
   /* Rounded corners for bubble effect */
-  padding: 15px;
+  padding: 5px;
   /* Space inside the bubble */
   margin: 1px;
+  margin-right: 100px;
   color: black;
   font-family: Arial, sans-serif;
   font-size: 30px;
   /* Adjust font size as needed */
   word-break: break-word;
   /* Ensures text breaks to prevent overflow */
-  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease; 
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .logo:hover {
@@ -33,16 +34,15 @@
   /* Scale up the element a little */
   transform: scale(1.05) translateZ(50px);
   /* Optional: Adjust the box-shadow for more depth */
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 .function {
-
   display: flex;
   justify-content: flex-end;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    /* Adjust min size as needed */
-    align-items: flex-start;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  /* Adjust min size as needed */
+  align-items: flex-start;
   /* Increase gap if needed */
 }
 
@@ -57,12 +57,12 @@
 }
 
 @keyframes wave-animation {
-  0%, 40%, 100% {
+  0%,
+  40%,
+  100% {
     transform: translateY(0);
   }
   20% {
     transform: translateY(-10px);
   }
 }
-
-
